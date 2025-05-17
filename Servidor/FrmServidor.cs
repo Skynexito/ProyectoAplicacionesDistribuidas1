@@ -28,6 +28,7 @@ namespace Servidor
             panelChildFrm.Controls.Add(frmChild);
             panelChildFrm.Tag = frmChild;
             frmChild.BringToFront();
+            frmChild.Show();
 
             
         }

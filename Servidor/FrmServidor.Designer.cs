@@ -49,7 +49,7 @@
             this.guna2Panel2.BackColor = System.Drawing.Color.MidnightBlue;
             this.guna2Panel2.Location = new System.Drawing.Point(-4, 1);
             this.guna2Panel2.Name = "guna2Panel2";
-            this.guna2Panel2.Size = new System.Drawing.Size(805, 23);
+            this.guna2Panel2.Size = new System.Drawing.Size(907, 23);
             this.guna2Panel2.TabIndex = 1;
             // 
             // guna2Panel1
@@ -60,7 +60,7 @@
             this.guna2Panel1.Controls.Add(this.btnAjustarVotantes);
             this.guna2Panel1.Location = new System.Drawing.Point(-4, 12);
             this.guna2Panel1.Name = "guna2Panel1";
-            this.guna2Panel1.Size = new System.Drawing.Size(205, 442);
+            this.guna2Panel1.Size = new System.Drawing.Size(205, 464);
             this.guna2Panel1.TabIndex = 0;
             // 
             // btnStats
@@ -114,23 +114,23 @@
             // 
             // panel1
             // 
-            this.panel1.Location = new System.Drawing.Point(207, 389);
+            this.panel1.Location = new System.Drawing.Point(207, 411);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(594, 65);
+            this.panel1.Size = new System.Drawing.Size(685, 65);
             this.panel1.TabIndex = 2;
             // 
             // panelChildFrm
             // 
             this.panelChildFrm.Location = new System.Drawing.Point(207, 31);
             this.panelChildFrm.Name = "panelChildFrm";
-            this.panelChildFrm.Size = new System.Drawing.Size(594, 352);
+            this.panelChildFrm.Size = new System.Drawing.Size(685, 374);
             this.panelChildFrm.TabIndex = 3;
             // 
             // FrmServidor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(904, 488);
             this.Controls.Add(this.panelChildFrm);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.guna2Panel2);
