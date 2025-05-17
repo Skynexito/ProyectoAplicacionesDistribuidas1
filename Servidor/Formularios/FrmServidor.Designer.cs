@@ -78,6 +78,7 @@
             this.btnStats.Size = new System.Drawing.Size(180, 45);
             this.btnStats.TabIndex = 2;
             this.btnStats.Text = "Estadisticas";
+            this.btnStats.Click += new System.EventHandler(this.btnStats_Click);
             // 
             // btnCrearLocalidades
             // 
@@ -94,6 +95,7 @@
             this.btnCrearLocalidades.Size = new System.Drawing.Size(180, 45);
             this.btnCrearLocalidades.TabIndex = 1;
             this.btnCrearLocalidades.Text = "Crear localidades";
+            this.btnCrearLocalidades.Click += new System.EventHandler(this.btnCrearLocalidades_Click);
             // 
             // btnAjustarVotantes
             // 

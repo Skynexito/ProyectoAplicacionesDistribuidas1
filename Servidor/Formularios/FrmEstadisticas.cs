@@ -8,13 +8,18 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Cliente
+namespace Servidor.Formularios
 {
-    public partial class Form1 : Form
+    public partial class FrmEstadisticas : Form
     {
-        public Form1()
+        public FrmEstadisticas()
         {
             InitializeComponent();
+        }
+
+        private void btnExit_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

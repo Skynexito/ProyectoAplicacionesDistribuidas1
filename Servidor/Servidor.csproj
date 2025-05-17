@@ -52,24 +52,42 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FrmAjustarNVotantes.cs">
+    <Compile Include="Formularios\FrmAjustarNVotantes.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FrmAjustarNVotantes.Designer.cs">
+    <Compile Include="Formularios\FrmAjustarNVotantes.Designer.cs">
       <DependentUpon>FrmAjustarNVotantes.cs</DependentUpon>
     </Compile>
-    <Compile Include="FrmServidor.cs">
+    <Compile Include="Formularios\FrmCrearLocalidad.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FrmServidor.Designer.cs">
+    <Compile Include="Formularios\FrmCrearLocalidad.Designer.cs">
+      <DependentUpon>FrmCrearLocalidad.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\FrmEstadisticas.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Formularios\FrmEstadisticas.Designer.cs">
+      <DependentUpon>FrmEstadisticas.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\FrmServidor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Formularios\FrmServidor.Designer.cs">
       <DependentUpon>FrmServidor.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="FrmAjustarNVotantes.resx">
+    <EmbeddedResource Include="Formularios\FrmAjustarNVotantes.resx">
       <DependentUpon>FrmAjustarNVotantes.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FrmServidor.resx">
+    <EmbeddedResource Include="Formularios\FrmCrearLocalidad.resx">
+      <DependentUpon>FrmCrearLocalidad.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Formularios\FrmEstadisticas.resx">
+      <DependentUpon>FrmEstadisticas.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Formularios\FrmServidor.resx">
       <DependentUpon>FrmServidor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -94,6 +112,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Modelo\Base de datos\" />
+    <Folder Include="Modelo\Clases\" />
+    <Folder Include="Modelo\Operaciones\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

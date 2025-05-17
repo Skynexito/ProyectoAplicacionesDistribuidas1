@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
             this.label1 = new System.Windows.Forms.Label();
-            this.guna2NumericUpDown1 = new Guna.UI2.WinForms.Guna2NumericUpDown();
+            this.numVotantes = new Guna.UI2.WinForms.Guna2NumericUpDown();
             this.btnGuardarNumeroVotantes = new Guna.UI2.WinForms.Guna2Button();
-            this.btnExit = new Guna.UI2.WinForms.Guna2CircleButton();
-            ((System.ComponentModel.ISupportInitialize)(this.guna2NumericUpDown1)).BeginInit();
+            this.btnExit = new System.Windows.Forms.Label();
+            ((System.ComponentModel.ISupportInitialize)(this.numVotantes)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -45,16 +45,16 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Numero de votantes por mesa";
             // 
-            // guna2NumericUpDown1
+            // numVotantes
             // 
-            this.guna2NumericUpDown1.BackColor = System.Drawing.Color.Transparent;
-            this.guna2NumericUpDown1.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.guna2NumericUpDown1.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.guna2NumericUpDown1.Location = new System.Drawing.Point(222, 178);
-            this.guna2NumericUpDown1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.guna2NumericUpDown1.Name = "guna2NumericUpDown1";
-            this.guna2NumericUpDown1.Size = new System.Drawing.Size(243, 48);
-            this.guna2NumericUpDown1.TabIndex = 1;
+            this.numVotantes.BackColor = System.Drawing.Color.Transparent;
+            this.numVotantes.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.numVotantes.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numVotantes.Location = new System.Drawing.Point(222, 178);
+            this.numVotantes.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.numVotantes.Name = "numVotantes";
+            this.numVotantes.Size = new System.Drawing.Size(243, 48);
+            this.numVotantes.TabIndex = 1;
             // 
             // btnGuardarNumeroVotantes
             // 
@@ -74,18 +74,13 @@
             // 
             // btnExit
             // 
-            this.btnExit.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
-            this.btnExit.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
-            this.btnExit.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
-            this.btnExit.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
-            this.btnExit.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.btnExit.ForeColor = System.Drawing.Color.White;
-            this.btnExit.Location = new System.Drawing.Point(12, 12);
+            this.btnExit.AutoSize = true;
+            this.btnExit.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnExit.Location = new System.Drawing.Point(12, 9);
             this.btnExit.Name = "btnExit";
-            this.btnExit.ShadowDecoration.Mode = Guna.UI2.WinForms.Enums.ShadowMode.Circle;
-            this.btnExit.Size = new System.Drawing.Size(35, 36);
-            this.btnExit.TabIndex = 3;
-            this.btnExit.Text = "x";
+            this.btnExit.Size = new System.Drawing.Size(22, 22);
+            this.btnExit.TabIndex = 12;
+            this.btnExit.Text = "X";
             this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
             // 
             // FrmAjustarNVotantes
@@ -95,11 +90,11 @@
             this.ClientSize = new System.Drawing.Size(679, 450);
             this.Controls.Add(this.btnExit);
             this.Controls.Add(this.btnGuardarNumeroVotantes);
-            this.Controls.Add(this.guna2NumericUpDown1);
+            this.Controls.Add(this.numVotantes);
             this.Controls.Add(this.label1);
             this.Name = "FrmAjustarNVotantes";
             this.Text = "Ajustar numero de votantes";
-            ((System.ComponentModel.ISupportInitialize)(this.guna2NumericUpDown1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numVotantes)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -108,8 +103,8 @@
         #endregion
 
         private System.Windows.Forms.Label label1;
-        private Guna.UI2.WinForms.Guna2NumericUpDown guna2NumericUpDown1;
+        private Guna.UI2.WinForms.Guna2NumericUpDown numVotantes;
         private Guna.UI2.WinForms.Guna2Button btnGuardarNumeroVotantes;
-        private Guna.UI2.WinForms.Guna2CircleButton btnExit;
+        private System.Windows.Forms.Label btnExit;
     }
 }

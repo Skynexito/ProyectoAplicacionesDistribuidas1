@@ -17,6 +17,7 @@ namespace Servidor
             InitializeComponent();
         }
 
+        //Metodo que permite cerrar el formulario mediante un boton
         private void btnExit_Click(object sender, EventArgs e)
         {
             this.Close();
