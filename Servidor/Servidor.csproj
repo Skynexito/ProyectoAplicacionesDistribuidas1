@@ -76,6 +76,12 @@
     <Compile Include="Formularios\FrmServidor.Designer.cs">
       <DependentUpon>FrmServidor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Modelo\Base de datos\ConexionDB.cs" />
+    <Compile Include="Modelo\Base de datos\ServidorDAL.cs" />
+    <Compile Include="Modelo\Clases\Localidad.cs" />
+    <Compile Include="Modelo\Clases\Mesa.cs" />
+    <Compile Include="Modelo\Clases\Opcion.cs" />
+    <Compile Include="Modelo\Clases\Votos.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Formularios\FrmAjustarNVotantes.resx">
@@ -114,8 +120,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Modelo\Base de datos\" />
-    <Folder Include="Modelo\Clases\" />
     <Folder Include="Modelo\Operaciones\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

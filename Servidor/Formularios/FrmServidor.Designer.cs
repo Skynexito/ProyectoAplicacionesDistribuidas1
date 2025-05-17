@@ -30,13 +30,15 @@
         {
             this.components = new System.ComponentModel.Container();
             this.guna2Elipse1 = new Guna.UI2.WinForms.Guna2Elipse(this.components);
-            this.guna2Panel2 = new Guna.UI2.WinForms.Guna2Panel();
+            this.pnlForm = new Guna.UI2.WinForms.Guna2Panel();
             this.guna2Panel1 = new Guna.UI2.WinForms.Guna2Panel();
             this.btnStats = new Guna.UI2.WinForms.Guna2Button();
             this.btnCrearLocalidades = new Guna.UI2.WinForms.Guna2Button();
             this.btnAjustarVotantes = new Guna.UI2.WinForms.Guna2Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.panelChildFrm = new System.Windows.Forms.Panel();
+            this.label1 = new System.Windows.Forms.Label();
+            this.pnlForm.SuspendLayout();
             this.guna2Panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -44,13 +46,17 @@
             // 
             this.guna2Elipse1.TargetControl = this;
             // 
-            // guna2Panel2
+            // pnlForm
             // 
-            this.guna2Panel2.BackColor = System.Drawing.Color.MidnightBlue;
-            this.guna2Panel2.Location = new System.Drawing.Point(-4, 1);
-            this.guna2Panel2.Name = "guna2Panel2";
-            this.guna2Panel2.Size = new System.Drawing.Size(907, 23);
-            this.guna2Panel2.TabIndex = 1;
+            this.pnlForm.BackColor = System.Drawing.Color.MidnightBlue;
+            this.pnlForm.Controls.Add(this.label1);
+            this.pnlForm.Location = new System.Drawing.Point(-4, -7);
+            this.pnlForm.Name = "pnlForm";
+            this.pnlForm.Size = new System.Drawing.Size(907, 31);
+            this.pnlForm.TabIndex = 1;
+            this.pnlForm.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pnlForm_MouseDown);
+            this.pnlForm.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pnlForm_MouseMove);
+            this.pnlForm.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pnlForm_MouseUp);
             // 
             // guna2Panel1
             // 
@@ -60,7 +66,7 @@
             this.guna2Panel1.Controls.Add(this.btnAjustarVotantes);
             this.guna2Panel1.Location = new System.Drawing.Point(-4, 12);
             this.guna2Panel1.Name = "guna2Panel1";
-            this.guna2Panel1.Size = new System.Drawing.Size(205, 464);
+            this.guna2Panel1.Size = new System.Drawing.Size(205, 478);
             this.guna2Panel1.TabIndex = 0;
             // 
             // btnStats
@@ -128,6 +134,17 @@
             this.panelChildFrm.Size = new System.Drawing.Size(685, 374);
             this.panelChildFrm.TabIndex = 3;
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.ForeColor = System.Drawing.SystemColors.Control;
+            this.label1.Location = new System.Drawing.Point(885, 12);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(15, 16);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "X";
+            this.label1.Click += new System.EventHandler(this.label1_Click);
+            // 
             // FrmServidor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -135,11 +152,13 @@
             this.ClientSize = new System.Drawing.Size(904, 488);
             this.Controls.Add(this.panelChildFrm);
             this.Controls.Add(this.panel1);
-            this.Controls.Add(this.guna2Panel2);
+            this.Controls.Add(this.pnlForm);
             this.Controls.Add(this.guna2Panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "FrmServidor";
             this.Text = "Servidor";
+            this.pnlForm.ResumeLayout(false);
+            this.pnlForm.PerformLayout();
             this.guna2Panel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -148,13 +167,14 @@
         #endregion
 
         private Guna.UI2.WinForms.Guna2Elipse guna2Elipse1;
-        private Guna.UI2.WinForms.Guna2Panel guna2Panel2;
+        private Guna.UI2.WinForms.Guna2Panel pnlForm;
         private Guna.UI2.WinForms.Guna2Panel guna2Panel1;
         private Guna.UI2.WinForms.Guna2Button btnAjustarVotantes;
         private Guna.UI2.WinForms.Guna2Button btnStats;
         private Guna.UI2.WinForms.Guna2Button btnCrearLocalidades;
         private System.Windows.Forms.Panel panelChildFrm;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Label label1;
     }
 }
 

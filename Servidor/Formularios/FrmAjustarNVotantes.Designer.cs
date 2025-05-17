@@ -48,12 +48,18 @@
             // numVotantes
             // 
             this.numVotantes.BackColor = System.Drawing.Color.Transparent;
+            this.numVotantes.BorderRadius = 5;
             this.numVotantes.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.numVotantes.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.numVotantes.Location = new System.Drawing.Point(222, 178);
             this.numVotantes.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.numVotantes.Maximum = new decimal(new int[] {
+            400,
+            0,
+            0,
+            0});
             this.numVotantes.Name = "numVotantes";
-            this.numVotantes.Size = new System.Drawing.Size(243, 48);
+            this.numVotantes.Size = new System.Drawing.Size(243, 46);
             this.numVotantes.TabIndex = 1;
             // 
             // btnGuardarNumeroVotantes
@@ -71,6 +77,7 @@
             this.btnGuardarNumeroVotantes.Size = new System.Drawing.Size(180, 45);
             this.btnGuardarNumeroVotantes.TabIndex = 2;
             this.btnGuardarNumeroVotantes.Text = "Guardar";
+            this.btnGuardarNumeroVotantes.Click += new System.EventHandler(this.btnGuardarNumeroVotantes_Click);
             // 
             // btnExit
             // 

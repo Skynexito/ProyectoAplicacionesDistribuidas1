@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Guna.UI2.WinForms;
 using Servidor.Formularios;
 
 namespace Servidor
@@ -57,6 +58,40 @@ namespace Servidor
 
 
         //-------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+        private bool _isDragging = false;
+        private Point _offset;
+        private void pnlForm_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                _isDragging = true;
+                _offset = e.Location; // Guarda la posición inicial del clic
+                pnlForm.Cursor = Cursors.SizeAll; // Cambia el cursor
+            }
+        }
+
+        private void pnlForm_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (_isDragging)
+            {
+                // Calcula la nueva posición del formulario
+                Point newLocation = this.PointToScreen(e.Location);
+                newLocation.Offset(-_offset.X, -_offset.Y);
+                this.Location = newLocation;
+            }
+        }
+
+        private void pnlForm_MouseUp(object sender, MouseEventArgs e)
+        {
+            _isDragging = false;
+            pnlForm.Cursor = Cursors.Default; // Restaura el cursor
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
     }
 
 

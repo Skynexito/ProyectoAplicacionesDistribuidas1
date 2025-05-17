@@ -53,6 +53,7 @@
             this.btnGuardarNumeroVotantes.Size = new System.Drawing.Size(180, 45);
             this.btnGuardarNumeroVotantes.TabIndex = 6;
             this.btnGuardarNumeroVotantes.Text = "Guardar";
+            this.btnGuardarNumeroVotantes.Click += new System.EventHandler(this.btnGuardarNumeroVotantes_Click);
             // 
             // numMesasLocalidad
             // 
