@@ -19,9 +19,20 @@ namespace Servidor.Modelo.Base_de_datos
         public void registrarCantidadMesasPorLocalidad(int cantidad)
         {
             comando.Connection = conexion.AbrirConexion();
-            comando.CommandText = "dbo.RegistrarCantidadVotantesPorMesa";
+            comando.CommandText = "dbo.ActualizarCantidadVotantesPorMesa";
             comando.CommandType = CommandType.StoredProcedure;
             comando.Parameters.AddWithValue("@Cantidad", cantidad);
+            comando.ExecuteNonQuery();
+            comando.Parameters.Clear();
+            conexion.CerrarConexion();
+        }
+
+        public void ActualizarFechaEleccion(DateTime fecha)
+        {
+            comando.Connection = conexion.AbrirConexion();
+            comando.CommandText = "dbo.ActualizarFechaEleccion";
+            comando.CommandType = CommandType.StoredProcedure;
+            comando.Parameters.AddWithValue("@Fecha", fecha);
             comando.ExecuteNonQuery();
             comando.Parameters.Clear();
             conexion.CerrarConexion();
@@ -37,6 +48,31 @@ namespace Servidor.Modelo.Base_de_datos
             comando.Parameters.Clear();
             conexion.CerrarConexion();
         }
+
+        public (int CantidadVotantes, DateTime FechaEleccion) ObtenerDatosControl()
+        {
+            var datos = (CantidadVotantes: 0, FechaEleccion: DateTime.MinValue);
+
+            comando.Connection = conexion.AbrirConexion();
+            comando.CommandText = "sp_ObtenerControlElecciones";
+            comando.CommandType = CommandType.StoredProcedure;
+
+            using (var reader = comando.ExecuteReader())
+            {
+                if (reader.Read())
+                {
+                    datos.CantidadVotantes = reader.GetInt32(0);
+                    datos.FechaEleccion = reader.GetDateTime(1);
+                }
+            }
+
+            comando.Parameters.Clear();
+            conexion.CerrarConexion();
+
+            return datos;
+        }
+
+
 
 
 

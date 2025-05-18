@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Servidor;
 
 namespace Cliente.Formularios
 {
@@ -15,6 +16,14 @@ namespace Cliente.Formularios
         public FrmClienteInicio()
         {
             InitializeComponent();
+        }
+
+        private void btnIngresar_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            FrmCliente form = new FrmCliente(this);
+            form.ShowDialog();
+            
         }
     }
 }

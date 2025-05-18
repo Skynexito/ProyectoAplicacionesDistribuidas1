@@ -1,6 +1,6 @@
 ﻿namespace Servidor
 {
-    partial class FrmAjustarNVotantes
+    partial class FrmAsignacionMesa
     {
         /// <summary>
         /// Required designer variable.
@@ -29,38 +29,22 @@
         private void InitializeComponent()
         {
             this.label1 = new System.Windows.Forms.Label();
-            this.numVotantes = new Guna.UI2.WinForms.Guna2NumericUpDown();
             this.btnGuardarNumeroVotantes = new Guna.UI2.WinForms.Guna2Button();
             this.btnExit = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.numVotantes)).BeginInit();
+            this.label2 = new System.Windows.Forms.Label();
+            this.numMesa = new System.Windows.Forms.Label();
+            this.monthCalendar1 = new System.Windows.Forms.MonthCalendar();
             this.SuspendLayout();
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(158, 103);
+            this.label1.Location = new System.Drawing.Point(34, 57);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(392, 32);
+            this.label1.Size = new System.Drawing.Size(270, 32);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Numero de votantes por mesa";
-            // 
-            // numVotantes
-            // 
-            this.numVotantes.BackColor = System.Drawing.Color.Transparent;
-            this.numVotantes.BorderRadius = 5;
-            this.numVotantes.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.numVotantes.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numVotantes.Location = new System.Drawing.Point(222, 178);
-            this.numVotantes.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.numVotantes.Maximum = new decimal(new int[] {
-            400,
-            0,
-            0,
-            0});
-            this.numVotantes.Name = "numVotantes";
-            this.numVotantes.Size = new System.Drawing.Size(243, 46);
-            this.numVotantes.TabIndex = 1;
+            this.label1.Text = "Asignacion de mesa";
             // 
             // btnGuardarNumeroVotantes
             // 
@@ -72,12 +56,11 @@
             this.btnGuardarNumeroVotantes.FillColor = System.Drawing.Color.SlateBlue;
             this.btnGuardarNumeroVotantes.Font = new System.Drawing.Font("Segoe UI", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnGuardarNumeroVotantes.ForeColor = System.Drawing.Color.White;
-            this.btnGuardarNumeroVotantes.Location = new System.Drawing.Point(250, 277);
+            this.btnGuardarNumeroVotantes.Location = new System.Drawing.Point(64, 336);
             this.btnGuardarNumeroVotantes.Name = "btnGuardarNumeroVotantes";
             this.btnGuardarNumeroVotantes.Size = new System.Drawing.Size(180, 45);
             this.btnGuardarNumeroVotantes.TabIndex = 2;
             this.btnGuardarNumeroVotantes.Text = "Guardar";
-            this.btnGuardarNumeroVotantes.Click += new System.EventHandler(this.btnGuardarNumeroVotantes_Click);
             // 
             // btnExit
             // 
@@ -90,18 +73,45 @@
             this.btnExit.Text = "X";
             this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
             // 
-            // FrmAjustarNVotantes
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(350, 130);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(312, 32);
+            this.label2.TabIndex = 13;
+            this.label2.Text = "Su numero de mesa es:";
+            // 
+            // numMesa
+            // 
+            this.numMesa.AutoSize = true;
+            this.numMesa.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numMesa.Location = new System.Drawing.Point(474, 205);
+            this.numMesa.Name = "numMesa";
+            this.numMesa.Size = new System.Drawing.Size(30, 32);
+            this.numMesa.TabIndex = 14;
+            this.numMesa.Text = "0";
+            // 
+            // monthCalendar1
+            // 
+            this.monthCalendar1.Location = new System.Drawing.Point(31, 108);
+            this.monthCalendar1.Name = "monthCalendar1";
+            this.monthCalendar1.TabIndex = 15;
+            // 
+            // FrmAsignacionMesa
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(679, 450);
+            this.Controls.Add(this.monthCalendar1);
+            this.Controls.Add(this.numMesa);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.btnExit);
             this.Controls.Add(this.btnGuardarNumeroVotantes);
-            this.Controls.Add(this.numVotantes);
             this.Controls.Add(this.label1);
-            this.Name = "FrmAjustarNVotantes";
+            this.Name = "FrmAsignacionMesa";
             this.Text = "Ajustar numero de votantes";
-            ((System.ComponentModel.ISupportInitialize)(this.numVotantes)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -110,8 +120,10 @@
         #endregion
 
         private System.Windows.Forms.Label label1;
-        private Guna.UI2.WinForms.Guna2NumericUpDown numVotantes;
         private Guna.UI2.WinForms.Guna2Button btnGuardarNumeroVotantes;
         private System.Windows.Forms.Label btnExit;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label numMesa;
+        private System.Windows.Forms.MonthCalendar monthCalendar1;
     }
 }

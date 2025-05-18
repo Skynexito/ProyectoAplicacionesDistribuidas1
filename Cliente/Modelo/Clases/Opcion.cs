@@ -26,8 +26,8 @@ namespace Servidor.Modelo.Clases
         public Opcion(int id, string nombreLista, string nombreCandidato)
         {
             this.id = id;
-            nombreLista = nombreLista;
-            nombreCandidato = nombreCandidato;
+            this.nombreLista = nombreLista;
+            this.nombreCandidato = nombreCandidato;
         }
 
         public int Id { get { return id; } set { id = value; } }

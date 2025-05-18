@@ -7,16 +7,36 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Cliente.Formularios;
 using Guna.UI2.WinForms;
 using Servidor.Formularios;
+using Servidor.Modelo.Clases;
 
 namespace Servidor
 {
-    public partial class FrmServidor : Form
+    public partial class FrmCliente : Form
     {
-        public FrmServidor()
+        private int maxVotantes;
+        private Localidad Localidad;
+        private DateTime fechaEleccion;
+        private FrmClienteInicio formInicio;
+        public FrmCliente()
         {
             InitializeComponent();
+        }
+        public FrmCliente(FrmClienteInicio formInicio)
+        {
+            InitializeComponent();
+            this.formInicio = formInicio;
+        }
+
+        public FrmCliente(Localidad localidad, int maxVotantes, DateTime fechaEleccion, FrmClienteInicio formInicio)
+        {
+            InitializeComponent();
+            this.maxVotantes = maxVotantes;
+            this.Localidad = localidad;
+            this.fechaEleccion = fechaEleccion;
+            this.formInicio = formInicio;
         }
 
 
@@ -43,17 +63,23 @@ namespace Servidor
 
         private void btnAjustarVotantes_Click(object sender, EventArgs e)
         {
-            OpenChildFrm(new FrmAjustarParametros());
+            OpenChildFrm(new FrmAsignacionMesa());
         }
 
         private void btnCrearLocalidades_Click(object sender, EventArgs e)
         {
-            OpenChildFrm(new FrmCrearLocalidad());
+            OpenChildFrm(new FrmRegistrarVotos());
         }
 
         private void btnStats_Click(object sender, EventArgs e)
         {
-            OpenChildFrm(new FrmEstadisticas());
+            OpenChildFrm(new FrmCerrarMesa());
+        }
+
+        private void btnSalir_Click(object sender, EventArgs e)
+        {
+            formInicio.Show();
+            this.Close();
         }
 
 
@@ -92,6 +118,8 @@ namespace Servidor
         {
             this.Close();
         }
+
+        
     }
 
 

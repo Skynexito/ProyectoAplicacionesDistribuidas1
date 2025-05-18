@@ -31,13 +31,12 @@
             this.components = new System.ComponentModel.Container();
             this.guna2Elipse1 = new Guna.UI2.WinForms.Guna2Elipse(this.components);
             this.pnlForm = new Guna.UI2.WinForms.Guna2Panel();
+            this.label1 = new System.Windows.Forms.Label();
             this.guna2Panel1 = new Guna.UI2.WinForms.Guna2Panel();
             this.btnStats = new Guna.UI2.WinForms.Guna2Button();
             this.btnCrearLocalidades = new Guna.UI2.WinForms.Guna2Button();
             this.btnAjustarVotantes = new Guna.UI2.WinForms.Guna2Button();
-            this.panel1 = new System.Windows.Forms.Panel();
             this.panelChildFrm = new System.Windows.Forms.Panel();
-            this.label1 = new System.Windows.Forms.Label();
             this.pnlForm.SuspendLayout();
             this.guna2Panel1.SuspendLayout();
             this.SuspendLayout();
@@ -57,6 +56,17 @@
             this.pnlForm.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pnlForm_MouseDown);
             this.pnlForm.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pnlForm_MouseMove);
             this.pnlForm.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pnlForm_MouseUp);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.ForeColor = System.Drawing.SystemColors.Control;
+            this.label1.Location = new System.Drawing.Point(885, 12);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(15, 16);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "X";
+            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // guna2Panel1
             // 
@@ -117,33 +127,15 @@
             this.btnAjustarVotantes.Name = "btnAjustarVotantes";
             this.btnAjustarVotantes.Size = new System.Drawing.Size(180, 45);
             this.btnAjustarVotantes.TabIndex = 0;
-            this.btnAjustarVotantes.Text = "Ajustar cantidad de votantes";
+            this.btnAjustarVotantes.Text = "Ajustar parametros de elecciones";
             this.btnAjustarVotantes.Click += new System.EventHandler(this.btnAjustarVotantes_Click);
-            // 
-            // panel1
-            // 
-            this.panel1.Location = new System.Drawing.Point(207, 411);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(685, 65);
-            this.panel1.TabIndex = 2;
             // 
             // panelChildFrm
             // 
             this.panelChildFrm.Location = new System.Drawing.Point(207, 31);
             this.panelChildFrm.Name = "panelChildFrm";
-            this.panelChildFrm.Size = new System.Drawing.Size(685, 374);
+            this.panelChildFrm.Size = new System.Drawing.Size(685, 445);
             this.panelChildFrm.TabIndex = 3;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.ForeColor = System.Drawing.SystemColors.Control;
-            this.label1.Location = new System.Drawing.Point(885, 12);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(15, 16);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "X";
-            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // FrmServidor
             // 
@@ -151,7 +143,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(904, 488);
             this.Controls.Add(this.panelChildFrm);
-            this.Controls.Add(this.panel1);
             this.Controls.Add(this.pnlForm);
             this.Controls.Add(this.guna2Panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
@@ -173,7 +164,6 @@
         private Guna.UI2.WinForms.Guna2Button btnStats;
         private Guna.UI2.WinForms.Guna2Button btnCrearLocalidades;
         private System.Windows.Forms.Panel panelChildFrm;
-        private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label label1;
     }
 }
