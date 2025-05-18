@@ -32,8 +32,8 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.btnExit = new System.Windows.Forms.Label();
-            this.guna2NumericUpDown1 = new Guna.UI2.WinForms.Guna2NumericUpDown();
-            ((System.ComponentModel.ISupportInitialize)(this.guna2NumericUpDown1)).BeginInit();
+            this.numMesa = new Guna.UI2.WinForms.Guna2NumericUpDown();
+            ((System.ComponentModel.ISupportInitialize)(this.numMesa)).BeginInit();
             this.SuspendLayout();
             // 
             // btnGuardarNumeroVotantes
@@ -83,30 +83,30 @@
             this.btnExit.Text = "X";
             this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
             // 
-            // guna2NumericUpDown1
+            // numMesa
             // 
-            this.guna2NumericUpDown1.BackColor = System.Drawing.Color.Transparent;
-            this.guna2NumericUpDown1.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.guna2NumericUpDown1.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.guna2NumericUpDown1.Location = new System.Drawing.Point(318, 71);
-            this.guna2NumericUpDown1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.guna2NumericUpDown1.Name = "guna2NumericUpDown1";
-            this.guna2NumericUpDown1.Size = new System.Drawing.Size(243, 48);
-            this.guna2NumericUpDown1.TabIndex = 12;
+            this.numMesa.BackColor = System.Drawing.Color.Transparent;
+            this.numMesa.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.numMesa.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numMesa.Location = new System.Drawing.Point(318, 71);
+            this.numMesa.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.numMesa.Name = "numMesa";
+            this.numMesa.Size = new System.Drawing.Size(243, 48);
+            this.numMesa.TabIndex = 12;
             // 
             // FrmRegistrarVotos
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(687, 450);
-            this.Controls.Add(this.guna2NumericUpDown1);
+            this.Controls.Add(this.numMesa);
             this.Controls.Add(this.btnExit);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.btnGuardarNumeroVotantes);
             this.Controls.Add(this.label1);
             this.Name = "FrmRegistrarVotos";
             this.Text = "Votos";
-            ((System.ComponentModel.ISupportInitialize)(this.guna2NumericUpDown1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numMesa)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -117,6 +117,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label btnExit;
-        private Guna.UI2.WinForms.Guna2NumericUpDown guna2NumericUpDown1;
+        private Guna.UI2.WinForms.Guna2NumericUpDown numMesa;
     }
 }
