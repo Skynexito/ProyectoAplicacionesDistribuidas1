@@ -33,11 +33,11 @@
             this.pnlForm = new Guna.UI2.WinForms.Guna2Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.guna2Panel1 = new Guna.UI2.WinForms.Guna2Panel();
+            this.btnSalir = new Guna.UI2.WinForms.Guna2Button();
             this.btnCerrarMesa = new Guna.UI2.WinForms.Guna2Button();
             this.btnRegistrarVotos = new Guna.UI2.WinForms.Guna2Button();
             this.btnAsignacionMesa = new Guna.UI2.WinForms.Guna2Button();
             this.panelChildFrm = new System.Windows.Forms.Panel();
-            this.btnSalir = new Guna.UI2.WinForms.Guna2Button();
             this.pnlForm.SuspendLayout();
             this.guna2Panel1.SuspendLayout();
             this.SuspendLayout();
@@ -80,6 +80,23 @@
             this.guna2Panel1.Name = "guna2Panel1";
             this.guna2Panel1.Size = new System.Drawing.Size(205, 478);
             this.guna2Panel1.TabIndex = 0;
+            // 
+            // btnSalir
+            // 
+            this.btnSalir.BorderRadius = 10;
+            this.btnSalir.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
+            this.btnSalir.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
+            this.btnSalir.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
+            this.btnSalir.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
+            this.btnSalir.FillColor = System.Drawing.Color.SlateBlue;
+            this.btnSalir.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.btnSalir.ForeColor = System.Drawing.Color.White;
+            this.btnSalir.Location = new System.Drawing.Point(12, 347);
+            this.btnSalir.Name = "btnSalir";
+            this.btnSalir.Size = new System.Drawing.Size(180, 45);
+            this.btnSalir.TabIndex = 3;
+            this.btnSalir.Text = "Salir";
+            this.btnSalir.Click += new System.EventHandler(this.btnSalir_Click);
             // 
             // btnCerrarMesa
             // 
@@ -130,7 +147,7 @@
             this.btnAsignacionMesa.Size = new System.Drawing.Size(180, 45);
             this.btnAsignacionMesa.TabIndex = 0;
             this.btnAsignacionMesa.Text = "Asignacion de mesa";
-            this.btnAsignacionMesa.Click += new System.EventHandler(this.btnAjustarVotantes_Click);
+            this.btnAsignacionMesa.Click += new System.EventHandler(this.btnAsignarMesa_Click);
             // 
             // panelChildFrm
             // 
@@ -138,23 +155,6 @@
             this.panelChildFrm.Name = "panelChildFrm";
             this.panelChildFrm.Size = new System.Drawing.Size(685, 445);
             this.panelChildFrm.TabIndex = 3;
-            // 
-            // btnSalir
-            // 
-            this.btnSalir.BorderRadius = 10;
-            this.btnSalir.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
-            this.btnSalir.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
-            this.btnSalir.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
-            this.btnSalir.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
-            this.btnSalir.FillColor = System.Drawing.Color.SlateBlue;
-            this.btnSalir.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.btnSalir.ForeColor = System.Drawing.Color.White;
-            this.btnSalir.Location = new System.Drawing.Point(12, 347);
-            this.btnSalir.Name = "btnSalir";
-            this.btnSalir.Size = new System.Drawing.Size(180, 45);
-            this.btnSalir.TabIndex = 3;
-            this.btnSalir.Text = "Salir";
-            this.btnSalir.Click += new System.EventHandler(this.btnSalir_Click);
             // 
             // FrmCliente
             // 

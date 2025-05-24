@@ -10,14 +10,14 @@ using System.Windows.Forms;
 using Cliente.Formularios;
 using Guna.UI2.WinForms;
 using Servidor.Formularios;
-using Servidor.Modelo.Clases;
+using Cliente.Modelo.Clases;
 
 namespace Servidor
 {
     public partial class FrmCliente : Form
     {
         private int maxVotantes;
-        private Localidad Localidad;
+        private Localidad localidad;
         private DateTime fechaEleccion;
         private FrmClienteInicio formInicio;
         public FrmCliente()
@@ -30,13 +30,12 @@ namespace Servidor
             this.formInicio = formInicio;
         }
 
-        public FrmCliente(Localidad localidad, int maxVotantes, DateTime fechaEleccion, FrmClienteInicio formInicio)
+        public FrmCliente(FrmClienteInicio formInicio, Localidad localidad)
         {
             InitializeComponent();
-            this.maxVotantes = maxVotantes;
-            this.Localidad = localidad;
-            this.fechaEleccion = fechaEleccion;
+            this.localidad = localidad;
             this.formInicio = formInicio;
+
         }
 
 
@@ -61,9 +60,9 @@ namespace Servidor
 
         //------------------- Metodos que permitiran ingresar a los diferentes opciones de formulario -----------------------------------------------------------------
 
-        private void btnAjustarVotantes_Click(object sender, EventArgs e)
+        private void btnAsignarMesa_Click(object sender, EventArgs e)
         {
-            OpenChildFrm(new FrmAsignacionMesa());
+            OpenChildFrm(new FrmAsignacionMesa(localidad, fechaEleccion));
         }
 
         private void btnCrearLocalidades_Click(object sender, EventArgs e)

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Servidor.Modelo.Clases
+namespace Cliente.Modelo.Clases
 {
     public class Votos
     {

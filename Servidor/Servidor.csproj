@@ -76,6 +76,7 @@
     <Compile Include="Formularios\FrmServidor.Designer.cs">
       <DependentUpon>FrmServidor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Modelo\Base de datos\ClienteDAL.cs" />
     <Compile Include="Modelo\Base de datos\ConexionDB.cs" />
     <Compile Include="Modelo\Base de datos\ServidorDAL.cs" />
     <Compile Include="Modelo\Clases\Localidad.cs" />

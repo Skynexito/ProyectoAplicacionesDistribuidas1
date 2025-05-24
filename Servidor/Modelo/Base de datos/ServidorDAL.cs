@@ -13,7 +13,6 @@ namespace Servidor.Modelo.Base_de_datos
     public class ServidorDAL
     {
         private ConexionDB conexion = new ConexionDB();
-        private SqlDataReader leer;
         private SqlCommand comando = new SqlCommand();
 
         public void registrarCantidadMesasPorLocalidad(int cantidad)
@@ -54,7 +53,7 @@ namespace Servidor.Modelo.Base_de_datos
             var datos = (CantidadVotantes: 0, FechaEleccion: DateTime.MinValue);
 
             comando.Connection = conexion.AbrirConexion();
-            comando.CommandText = "sp_ObtenerControlElecciones";
+            comando.CommandText = "dbo.ObtenerControlElecciones";
             comando.CommandType = CommandType.StoredProcedure;
 
             using (var reader = comando.ExecuteReader())
@@ -71,11 +70,6 @@ namespace Servidor.Modelo.Base_de_datos
 
             return datos;
         }
-
-
-
-
-
 
 
     }

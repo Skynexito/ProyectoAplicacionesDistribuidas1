@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.label1 = new System.Windows.Forms.Label();
-            this.btnGuardarNumeroVotantes = new Guna.UI2.WinForms.Guna2Button();
+            this.btnAsignarMesa = new Guna.UI2.WinForms.Guna2Button();
             this.btnExit = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.numMesa = new System.Windows.Forms.Label();
@@ -46,21 +46,22 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Asignacion de mesa";
             // 
-            // btnGuardarNumeroVotantes
+            // btnAsignarMesa
             // 
-            this.btnGuardarNumeroVotantes.BorderRadius = 10;
-            this.btnGuardarNumeroVotantes.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
-            this.btnGuardarNumeroVotantes.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
-            this.btnGuardarNumeroVotantes.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
-            this.btnGuardarNumeroVotantes.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
-            this.btnGuardarNumeroVotantes.FillColor = System.Drawing.Color.SlateBlue;
-            this.btnGuardarNumeroVotantes.Font = new System.Drawing.Font("Segoe UI", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnGuardarNumeroVotantes.ForeColor = System.Drawing.Color.White;
-            this.btnGuardarNumeroVotantes.Location = new System.Drawing.Point(64, 336);
-            this.btnGuardarNumeroVotantes.Name = "btnGuardarNumeroVotantes";
-            this.btnGuardarNumeroVotantes.Size = new System.Drawing.Size(180, 45);
-            this.btnGuardarNumeroVotantes.TabIndex = 2;
-            this.btnGuardarNumeroVotantes.Text = "Guardar";
+            this.btnAsignarMesa.BorderRadius = 10;
+            this.btnAsignarMesa.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
+            this.btnAsignarMesa.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
+            this.btnAsignarMesa.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
+            this.btnAsignarMesa.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
+            this.btnAsignarMesa.FillColor = System.Drawing.Color.SlateBlue;
+            this.btnAsignarMesa.Font = new System.Drawing.Font("Segoe UI", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnAsignarMesa.ForeColor = System.Drawing.Color.White;
+            this.btnAsignarMesa.Location = new System.Drawing.Point(66, 348);
+            this.btnAsignarMesa.Name = "btnAsignarMesa";
+            this.btnAsignarMesa.Size = new System.Drawing.Size(180, 45);
+            this.btnAsignarMesa.TabIndex = 2;
+            this.btnAsignarMesa.Text = "Asignar";
+            this.btnAsignarMesa.Click += new System.EventHandler(this.btnAsignarMesa_Click);
             // 
             // btnExit
             // 
@@ -108,7 +109,7 @@
             this.Controls.Add(this.numMesa);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.btnExit);
-            this.Controls.Add(this.btnGuardarNumeroVotantes);
+            this.Controls.Add(this.btnAsignarMesa);
             this.Controls.Add(this.label1);
             this.Name = "FrmAsignacionMesa";
             this.Text = "Ajustar numero de votantes";
@@ -120,7 +121,7 @@
         #endregion
 
         private System.Windows.Forms.Label label1;
-        private Guna.UI2.WinForms.Guna2Button btnGuardarNumeroVotantes;
+        private Guna.UI2.WinForms.Guna2Button btnAsignarMesa;
         private System.Windows.Forms.Label btnExit;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label numMesa;

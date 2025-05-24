@@ -8,35 +8,34 @@ namespace Servidor.Modelo.Clases
 {
     public class Localidad
     {
-        private int id;
-        private string nombre;
-        private int cantidadMesas;
-        private List<Mesa> mesas;
+        public int Id { get; set; }
+        public string Nombre { get; set; }
+        public int CantidadMesas { get; set; }
 
-        public Localidad()
-        {
-            id = 0;
-            nombre = "nombre";
-            cantidadMesas = 0;
-            mesas = new List<Mesa>();
-        }
+        public Localidad() { }
 
         public Localidad(int id, string nombre, int numeroMesas)
         {
-            this.id = id;
-            this.nombre = nombre;
-            this.cantidadMesas = numeroMesas;
-            this.mesas = null;
+            Id = id;
+            Nombre = nombre;
+            CantidadMesas = numeroMesas;
         }
 
-        public int Id { get { return id; } set { id = value; } }
-        public string Nombre { get { return nombre; } set { nombre = value; } }
-        public int CantidadMesas { get { return cantidadMesas; } set { cantidadMesas = value; } }
-        public List<Mesa> Mesas { get { return mesas; } set { mesas = value; } }
-
-        public override string ToString() {
-            return $"{Id}. {Nombre}";
+        public override string ToString()
+        {
+            return $"{Id}: {Nombre};";
         }
 
+        public static Localidad FromString(string data)
+        {
+            string[] partes = data.Trim().Split(',');
+            return new Localidad(
+                int.Parse(partes[0]),
+                partes[1],
+                int.Parse(partes[2])
+            );
+        }
     }
 }
+
+
