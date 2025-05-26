@@ -33,7 +33,7 @@
             this.btnExit = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.numMesa = new System.Windows.Forms.Label();
-            this.monthCalendar1 = new System.Windows.Forms.MonthCalendar();
+            this.mcVotacion = new System.Windows.Forms.MonthCalendar();
             this.SuspendLayout();
             // 
             // label1
@@ -94,18 +94,18 @@
             this.numMesa.TabIndex = 14;
             this.numMesa.Text = "0";
             // 
-            // monthCalendar1
+            // mcVotacion
             // 
-            this.monthCalendar1.Location = new System.Drawing.Point(31, 108);
-            this.monthCalendar1.Name = "monthCalendar1";
-            this.monthCalendar1.TabIndex = 15;
+            this.mcVotacion.Location = new System.Drawing.Point(31, 108);
+            this.mcVotacion.Name = "mcVotacion";
+            this.mcVotacion.TabIndex = 15;
             // 
             // FrmAsignacionMesa
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(679, 450);
-            this.Controls.Add(this.monthCalendar1);
+            this.Controls.Add(this.mcVotacion);
             this.Controls.Add(this.numMesa);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.btnExit);
@@ -125,6 +125,6 @@
         private System.Windows.Forms.Label btnExit;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label numMesa;
-        private System.Windows.Forms.MonthCalendar monthCalendar1;
+        private System.Windows.Forms.MonthCalendar mcVotacion;
     }
 }

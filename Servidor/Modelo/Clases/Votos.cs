@@ -35,7 +35,7 @@ namespace Servidor.Modelo.Clases
 
         public override string ToString()
         {
-            return $"{Opcion.NombreLista}: {Cantidad} votos";
+            return $"{Opcion.Candidato}: {Cantidad} votos";
         }
     }
 }

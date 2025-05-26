@@ -11,6 +11,7 @@ using Cliente.Formularios;
 using Guna.UI2.WinForms;
 using Servidor.Formularios;
 using Cliente.Modelo.Clases;
+using Cliente.Modelo.ClienteTCP;
 
 namespace Servidor
 {
@@ -20,6 +21,8 @@ namespace Servidor
         private Localidad localidad;
         private DateTime fechaEleccion;
         private FrmClienteInicio formInicio;
+        private ClienteTCP clienteTCP;
+
         public FrmCliente()
         {
             InitializeComponent();
@@ -37,6 +40,31 @@ namespace Servidor
             this.formInicio = formInicio;
 
         }
+
+        public FrmCliente(FrmClienteInicio formInicio, Localidad localidad, ClienteTCP clienteTCP)
+        {
+            InitializeComponent();
+            this.localidad = localidad;
+            this.formInicio = formInicio;
+            this.clienteTCP = clienteTCP;
+            ObtenerParametrosControlAsync(); // ejemplo de uso inmediato
+        }
+
+        private async void ObtenerParametrosControlAsync()
+        {
+            await clienteTCP.EnviarComandoAsync("EnviarParametrosControl");
+            string respuesta = await clienteTCP.LeerRespuestaAsync();
+
+            string[] partes = respuesta.Split(',');
+            if (partes.Length == 2)
+            {
+                maxVotantes = int.Parse(partes[0]);
+                fechaEleccion = DateTime.Parse(partes[1]);
+
+            }
+        }
+
+
 
 
         //----------------- Metodo para cambiar entre formularios a traves de un panel dentro del formulario Servidor -----------------------------------------------
@@ -62,7 +90,7 @@ namespace Servidor
 
         private void btnAsignarMesa_Click(object sender, EventArgs e)
         {
-            OpenChildFrm(new FrmAsignacionMesa(localidad, fechaEleccion));
+            OpenChildFrm(new FrmAsignacionMesa(localidad, fechaEleccion, clienteTCP));
         }
 
         private void btnCrearLocalidades_Click(object sender, EventArgs e)

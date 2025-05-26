@@ -86,6 +86,7 @@
     <Compile Include="Modelo\Clases\Mesa.cs" />
     <Compile Include="Modelo\Clases\Opcion.cs" />
     <Compile Include="Modelo\Clases\Votos.cs" />
+    <Compile Include="Modelo\ClienteTCP\ClienteTCP.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Formularios\FrmAsignacionMesa.resx">

@@ -83,6 +83,7 @@
     <Compile Include="Modelo\Clases\Mesa.cs" />
     <Compile Include="Modelo\Clases\Opcion.cs" />
     <Compile Include="Modelo\Clases\Votos.cs" />
+    <Compile Include="Modelo\ServidorTCP\ServidorTCP.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Formularios\FrmAjustarParametros.resx">
@@ -120,8 +121,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Modelo\Operaciones\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

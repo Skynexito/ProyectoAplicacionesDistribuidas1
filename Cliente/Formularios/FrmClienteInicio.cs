@@ -10,20 +10,23 @@ using System.Windows.Forms;
 using Servidor;
 using Cliente.Modelo.Clases;
 using System.Net.Sockets;
+using Cliente.Modelo.ClienteTCP;
 
 namespace Cliente.Formularios
 {
     public partial class FrmClienteInicio : Form
     {
         private List<Localidad> localidades = new List<Localidad>();
-      
+        private ClienteTCP clienteTCP = new ClienteTCP();
+
+
         public FrmClienteInicio()
         {
             InitializeComponent();
             ConectarServidor();
         }
 
-        private void ConectarServidor()
+        private async void ConectarServidor()
         {
             bool conectado = false;
 
@@ -31,32 +34,22 @@ namespace Cliente.Formularios
             {
                 try
                 {
-                    TcpClient cliente = new TcpClient();
-                    cliente.Connect("127.0.0.1", 6000);
-                    NetworkStream stream = cliente.GetStream();
+                    conectado = await clienteTCP.ConectarAsync("127.0.0.1", 6000);
 
-                    byte[] mensaje = Encoding.UTF8.GetBytes("1\n");
-                    stream.Write(mensaje, 0, mensaje.Length);
+                    if (!conectado)
+                        throw new Exception();
 
-                    StringBuilder sb = new StringBuilder();
-                    byte[] buffer = new byte[1];
-                    while (true)
-                    {
-                        int leido = stream.Read(buffer, 0, 1);
-                        if (leido == 0 || (char)buffer[0] == '\n') break;
-                        sb.Append((char)buffer[0]);
-                    }
+                    await clienteTCP.EnviarComandoAsync("EnviarLocalidades");
 
-                    string data = sb.ToString();
+                    string data = await clienteTCP.LeerRespuestaAsync();
                     localidades = ParsearLocalidades(data);
+
                     cbbLocalidades.Items.Clear();
                     foreach (var loc in localidades)
                     {
                         cbbLocalidades.Items.Add(loc);
                     }
                     cbbLocalidades.SelectedIndex = localidades.Count > 0 ? 0 : -1;
-
-                    conectado = true;
                 }
                 catch
                 {
@@ -71,6 +64,7 @@ namespace Cliente.Formularios
                 }
             }
         }
+
 
         private List<Localidad> ParsearLocalidades(string data)
         {
@@ -91,11 +85,11 @@ namespace Cliente.Formularios
 
         private void btnIngresar_Click(object sender, EventArgs e)
         {
-            Localidad localidad = (Localidad) cbbLocalidades.SelectedItem;
+            Localidad localidad = (Localidad)cbbLocalidades.SelectedItem;
             this.Hide();
-            FrmCliente form = new FrmCliente(this, localidad );
+            FrmCliente form = new FrmCliente(this, localidad, clienteTCP);
             form.ShowDialog();
-            
         }
+
     }
 }
