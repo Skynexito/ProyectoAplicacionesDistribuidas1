@@ -95,7 +95,7 @@ namespace Servidor
 
         private void btnCrearLocalidades_Click(object sender, EventArgs e)
         {
-            OpenChildFrm(new FrmRegistrarVotos());
+            OpenChildFrm(new FrmRegistrarVotos(localidad, maxVotantes, clienteTCP));
         }
 
         private void btnStats_Click(object sender, EventArgs e)

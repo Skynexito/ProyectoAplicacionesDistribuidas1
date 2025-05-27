@@ -38,5 +38,5 @@ namespace Cliente.Modelo.Clases
         {
             return $"Lista: {NombreLista}, Candidato: {Candidato}";
         }
-    }
+     }
 }

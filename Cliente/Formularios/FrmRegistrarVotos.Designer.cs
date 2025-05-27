@@ -28,12 +28,17 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btnGuardarNumeroVotantes = new Guna.UI2.WinForms.Guna2Button();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.btnExit = new System.Windows.Forms.Label();
             this.numMesa = new Guna.UI2.WinForms.Guna2NumericUpDown();
+            this.dgvVotos = new Guna.UI2.WinForms.Guna2DataGridView();
             ((System.ComponentModel.ISupportInitialize)(this.numMesa)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvVotos)).BeginInit();
             this.SuspendLayout();
             // 
             // btnGuardarNumeroVotantes
@@ -46,11 +51,12 @@
             this.btnGuardarNumeroVotantes.FillColor = System.Drawing.Color.SlateBlue;
             this.btnGuardarNumeroVotantes.Font = new System.Drawing.Font("Segoe UI", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnGuardarNumeroVotantes.ForeColor = System.Drawing.Color.White;
-            this.btnGuardarNumeroVotantes.Location = new System.Drawing.Point(219, 375);
+            this.btnGuardarNumeroVotantes.Location = new System.Drawing.Point(221, 393);
             this.btnGuardarNumeroVotantes.Name = "btnGuardarNumeroVotantes";
             this.btnGuardarNumeroVotantes.Size = new System.Drawing.Size(180, 45);
             this.btnGuardarNumeroVotantes.TabIndex = 6;
             this.btnGuardarNumeroVotantes.Text = "Guardar";
+            this.btnGuardarNumeroVotantes.Click += new System.EventHandler(this.btnGuardarNumeroVotantes_Click);
             // 
             // label1
             // 
@@ -94,11 +100,63 @@
             this.numMesa.Size = new System.Drawing.Size(243, 48);
             this.numMesa.TabIndex = 12;
             // 
+            // dgvVotos
+            // 
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.White;
+            this.dgvVotos.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(88)))), ((int)(((byte)(255)))));
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvVotos.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            this.dgvVotos.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(69)))), ((int)(((byte)(94)))));
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(229)))), ((int)(((byte)(255)))));
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(69)))), ((int)(((byte)(94)))));
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvVotos.DefaultCellStyle = dataGridViewCellStyle3;
+            this.dgvVotos.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(229)))), ((int)(((byte)(255)))));
+            this.dgvVotos.Location = new System.Drawing.Point(41, 149);
+            this.dgvVotos.Name = "dgvVotos";
+            this.dgvVotos.RowHeadersVisible = false;
+            this.dgvVotos.RowHeadersWidth = 51;
+            this.dgvVotos.RowTemplate.Height = 24;
+            this.dgvVotos.Size = new System.Drawing.Size(576, 220);
+            this.dgvVotos.TabIndex = 13;
+            this.dgvVotos.ThemeStyle.AlternatingRowsStyle.BackColor = System.Drawing.Color.White;
+            this.dgvVotos.ThemeStyle.AlternatingRowsStyle.Font = null;
+            this.dgvVotos.ThemeStyle.AlternatingRowsStyle.ForeColor = System.Drawing.Color.Empty;
+            this.dgvVotos.ThemeStyle.AlternatingRowsStyle.SelectionBackColor = System.Drawing.Color.Empty;
+            this.dgvVotos.ThemeStyle.AlternatingRowsStyle.SelectionForeColor = System.Drawing.Color.Empty;
+            this.dgvVotos.ThemeStyle.BackColor = System.Drawing.Color.White;
+            this.dgvVotos.ThemeStyle.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(229)))), ((int)(((byte)(255)))));
+            this.dgvVotos.ThemeStyle.HeaderStyle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(88)))), ((int)(((byte)(255)))));
+            this.dgvVotos.ThemeStyle.HeaderStyle.BorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
+            this.dgvVotos.ThemeStyle.HeaderStyle.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dgvVotos.ThemeStyle.HeaderStyle.ForeColor = System.Drawing.Color.White;
+            this.dgvVotos.ThemeStyle.HeaderStyle.HeaightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvVotos.ThemeStyle.HeaderStyle.Height = 4;
+            this.dgvVotos.ThemeStyle.ReadOnly = false;
+            this.dgvVotos.ThemeStyle.RowsStyle.BackColor = System.Drawing.Color.White;
+            this.dgvVotos.ThemeStyle.RowsStyle.BorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
+            this.dgvVotos.ThemeStyle.RowsStyle.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dgvVotos.ThemeStyle.RowsStyle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(69)))), ((int)(((byte)(94)))));
+            this.dgvVotos.ThemeStyle.RowsStyle.Height = 24;
+            this.dgvVotos.ThemeStyle.RowsStyle.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(229)))), ((int)(((byte)(255)))));
+            this.dgvVotos.ThemeStyle.RowsStyle.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(69)))), ((int)(((byte)(94)))));
+            // 
             // FrmRegistrarVotos
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(687, 450);
+            this.Controls.Add(this.dgvVotos);
             this.Controls.Add(this.numMesa);
             this.Controls.Add(this.btnExit);
             this.Controls.Add(this.label2);
@@ -106,7 +164,9 @@
             this.Controls.Add(this.label1);
             this.Name = "FrmRegistrarVotos";
             this.Text = "Votos";
+            this.Load += new System.EventHandler(this.FrmRegistrarVotos_Load);
             ((System.ComponentModel.ISupportInitialize)(this.numMesa)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvVotos)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -118,5 +178,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label btnExit;
         private Guna.UI2.WinForms.Guna2NumericUpDown numMesa;
+        private Guna.UI2.WinForms.Guna2DataGridView dgvVotos;
     }
 }

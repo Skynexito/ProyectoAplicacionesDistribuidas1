@@ -87,5 +87,84 @@ namespace Servidor.Modelo.Base_de_datos
             conexion.CerrarConexion();
         }
 
+        public bool MesaEstaActiva(int numeroMesa, int idLocalidad)
+        {
+            SqlCommand cmd = new SqlCommand("SELECT Estado FROM MESA WHERE NumeroMesa = @Numero AND IdLocalidad = @Loc", conexion.AbrirConexion());
+            cmd.Parameters.AddWithValue("@Numero", numeroMesa);
+            cmd.Parameters.AddWithValue("@Loc", idLocalidad);
+
+            object result = cmd.ExecuteScalar();
+            conexion.CerrarConexion();
+            return result != null && Convert.ToBoolean(result);
+        }
+
+        public void InsertarOActualizarVoto(int numeroMesa, int idLocalidad, int idOpcion, int cantidad)
+        {
+            SqlCommand getMesaId = new SqlCommand("SELECT Id FROM MESA WHERE NumeroMesa = @Num AND IdLocalidad = @Loc", conexion.AbrirConexion());
+            getMesaId.Parameters.AddWithValue("@Num", numeroMesa);
+            getMesaId.Parameters.AddWithValue("@Loc", idLocalidad);
+            int idMesa = Convert.ToInt32(getMesaId.ExecuteScalar());
+            conexion.CerrarConexion();
+
+            SqlCommand check = new SqlCommand("SELECT COUNT(*) FROM VOTOS WHERE IdMesa = @IdMesa AND IdOpcion = @IdOpcion", conexion.AbrirConexion());
+            check.Parameters.AddWithValue("@IdMesa", idMesa);
+            check.Parameters.AddWithValue("@IdOpcion", idOpcion);
+            int existe = (int)check.ExecuteScalar();
+            conexion.CerrarConexion();
+
+            if (existe > 0)
+            {
+                SqlCommand update = new SqlCommand("UPDATE VOTOS SET Cantidad = @Cantidad WHERE IdMesa = @IdMesa AND IdOpcion = @IdOpcion", conexion.AbrirConexion());
+                update.Parameters.AddWithValue("@Cantidad", cantidad);
+                update.Parameters.AddWithValue("@IdMesa", idMesa);
+                update.Parameters.AddWithValue("@IdOpcion", idOpcion);
+                update.ExecuteNonQuery();
+                conexion.CerrarConexion();
+            }
+            else
+            {
+                SqlCommand insert = new SqlCommand("RegistrarVotos", conexion.AbrirConexion());
+                insert.CommandType = CommandType.StoredProcedure;
+                insert.Parameters.AddWithValue("@Cantidad", cantidad);
+                insert.Parameters.AddWithValue("@NumeroMesa", numeroMesa);
+                insert.Parameters.AddWithValue("@IdLocalidad", idLocalidad);
+                insert.Parameters.AddWithValue("@IdOpcion", idOpcion);
+                insert.ExecuteNonQuery();
+                conexion.CerrarConexion();
+            }
+        }
+
+        public List<Opcion> ObtenerOpciones()
+        {
+            List<Opcion> lista = new List<Opcion>();
+
+            try
+            {
+                SqlCommand cmd = new SqlCommand("ObtenerOpciones", conexion.AbrirConexion());
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                SqlDataReader dr = cmd.ExecuteReader();
+                while (dr.Read())
+                {
+                    int id = Convert.ToInt32(dr["Id"]);
+                    string nombreCandidato = dr["NombreCandidato"].ToString();
+
+                    Opcion opcion = new Opcion(id, "Lista", nombreCandidato); // Puedes cambiar "Lista" si lo quieres dinámico
+                    lista.Add(opcion);
+                }
+
+                dr.Close();
+                conexion.CerrarConexion();
+            }
+            catch (Exception ex)
+            {
+                conexion.CerrarConexion();
+                throw new Exception("Error al obtener las opciones: " + ex.Message);
+            }
+
+            return lista;
+        }
+
+
     }
 }
