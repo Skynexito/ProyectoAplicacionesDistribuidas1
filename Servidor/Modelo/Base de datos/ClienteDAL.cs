@@ -89,32 +89,51 @@ namespace Servidor.Modelo.Base_de_datos
 
         public bool MesaEstaActiva(int numeroMesa, int idLocalidad)
         {
-            SqlCommand cmd = new SqlCommand("SELECT Estado FROM MESA WHERE NumeroMesa = @Numero AND IdLocalidad = @Loc", conexion.AbrirConexion());
-            cmd.Parameters.AddWithValue("@Numero", numeroMesa);
-            cmd.Parameters.AddWithValue("@Loc", idLocalidad);
-
-            object result = cmd.ExecuteScalar();
+            bool estado = false;
+            comando.Connection = conexion.AbrirConexion();
+            comando.CommandText = "dbo.VerificarEstadoMesa";
+            comando.Parameters.AddWithValue("@NumeroMesa", numeroMesa);
+            comando.Parameters.AddWithValue("@IdLocalidad", idLocalidad);
+            comando.CommandType = CommandType.StoredProcedure;
+            reader = comando.ExecuteReader();
+            while (reader.Read())
+            {
+                estado = reader.GetBoolean(0); // ✅ si el campo es tipo BIT
+            }
+            comando.Parameters.Clear();
             conexion.CerrarConexion();
-            return result != null && Convert.ToBoolean(result);
+            return estado;
         }
+
+        public int ObtenerIdMesa(int numeroMesa, int idLocalidad)
+        {
+            SqlCommand getMesaId = new SqlCommand("dbo.ObtenerIdMesa", conexion.AbrirConexion());
+            getMesaId.CommandType = CommandType.StoredProcedure; // ✅ esto es obligatorio
+            getMesaId.Parameters.AddWithValue("@NumeroMesa", numeroMesa);
+            getMesaId.Parameters.AddWithValue("@IdLocalidad", idLocalidad);
+            int idMesa = Convert.ToInt32(getMesaId.ExecuteScalar());
+            getMesaId.Parameters.Clear();
+            conexion.CerrarConexion();
+            return idMesa;
+        }
+
 
         public void InsertarOActualizarVoto(int numeroMesa, int idLocalidad, int idOpcion, int cantidad)
         {
-            SqlCommand getMesaId = new SqlCommand("SELECT Id FROM MESA WHERE NumeroMesa = @Num AND IdLocalidad = @Loc", conexion.AbrirConexion());
-            getMesaId.Parameters.AddWithValue("@Num", numeroMesa);
-            getMesaId.Parameters.AddWithValue("@Loc", idLocalidad);
-            int idMesa = Convert.ToInt32(getMesaId.ExecuteScalar());
-            conexion.CerrarConexion();
+            int idMesa = ObtenerIdMesa(numeroMesa, idLocalidad);
 
-            SqlCommand check = new SqlCommand("SELECT COUNT(*) FROM VOTOS WHERE IdMesa = @IdMesa AND IdOpcion = @IdOpcion", conexion.AbrirConexion());
+            SqlCommand check = new SqlCommand("dbo.ExisteVoto", conexion.AbrirConexion());
+            check.CommandType = CommandType.StoredProcedure; // ✅ esto es obligatorio
             check.Parameters.AddWithValue("@IdMesa", idMesa);
             check.Parameters.AddWithValue("@IdOpcion", idOpcion);
             int existe = (int)check.ExecuteScalar();
+            check.Parameters.Clear();
             conexion.CerrarConexion();
 
             if (existe > 0)
             {
-                SqlCommand update = new SqlCommand("UPDATE VOTOS SET Cantidad = @Cantidad WHERE IdMesa = @IdMesa AND IdOpcion = @IdOpcion", conexion.AbrirConexion());
+                SqlCommand update = new SqlCommand("dbo.ActualizarVotos", conexion.AbrirConexion());
+                update.CommandType = CommandType.StoredProcedure;
                 update.Parameters.AddWithValue("@Cantidad", cantidad);
                 update.Parameters.AddWithValue("@IdMesa", idMesa);
                 update.Parameters.AddWithValue("@IdOpcion", idOpcion);
@@ -123,7 +142,7 @@ namespace Servidor.Modelo.Base_de_datos
             }
             else
             {
-                SqlCommand insert = new SqlCommand("RegistrarVotos", conexion.AbrirConexion());
+                SqlCommand insert = new SqlCommand("dbo.RegistrarVotos", conexion.AbrirConexion());
                 insert.CommandType = CommandType.StoredProcedure;
                 insert.Parameters.AddWithValue("@Cantidad", cantidad);
                 insert.Parameters.AddWithValue("@NumeroMesa", numeroMesa);
@@ -133,6 +152,17 @@ namespace Servidor.Modelo.Base_de_datos
                 conexion.CerrarConexion();
             }
         }
+
+        public void CerrarMesa(int idMesa)
+        {
+            SqlCommand cmd = new SqlCommand("dbo.CerrarMesa", conexion.AbrirConexion());
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@Id", idMesa);
+            cmd.ExecuteNonQuery();
+            cmd.Parameters.Clear();
+            conexion.CerrarConexion();
+        }
+
 
         public List<Opcion> ObtenerOpciones()
         {

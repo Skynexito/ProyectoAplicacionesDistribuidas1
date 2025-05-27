@@ -100,7 +100,7 @@ namespace Servidor
 
         private void btnStats_Click(object sender, EventArgs e)
         {
-            OpenChildFrm(new FrmCerrarMesa());
+            OpenChildFrm(new FrmCerrarMesa(localidad, clienteTCP));
         }
 
         private void btnSalir_Click(object sender, EventArgs e)

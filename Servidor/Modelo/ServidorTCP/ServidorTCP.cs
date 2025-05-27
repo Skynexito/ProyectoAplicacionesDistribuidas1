@@ -9,6 +9,7 @@ using Servidor.Modelo.Base_de_datos;
 using System.Windows.Forms;
 using Servidor.Modelo.Clases;
 using System.IO;
+using System.Runtime.InteropServices.ComTypes;
 
 namespace Servidor.Modelo.ServidorTCP
 {
@@ -72,6 +73,10 @@ namespace Servidor.Modelo.ServidorTCP
                     else if (comando == "EnviarOpciones")
                     {
                         EnviarOpcionesVoto(stream, cliente);
+                    }
+                    else if (comando.StartsWith("CerrarMesa|"))
+                    {
+                        CerrarMesa(comando, stream, cliente);
                     }
 
                     else
@@ -185,6 +190,15 @@ namespace Servidor.Modelo.ServidorTCP
 
                 ClienteDAL clienteDAL = new ClienteDAL();
 
+                int idMesa = clienteDAL.ObtenerIdMesa(numeroMesa, idLocalidad);
+
+                if (idMesa == 0)
+                {
+                    byte[] datosNoExiste = Encoding.UTF8.GetBytes("Mesa no encontrada\n");
+                    await stream.WriteAsync(datosNoExiste, 0, datosNoExiste.Length);
+                    return;
+                }
+
                 // Validar si la mesa está activa
                 if (!clienteDAL.MesaEstaActiva(numeroMesa, idLocalidad))
                 {
@@ -212,6 +226,55 @@ namespace Servidor.Modelo.ServidorTCP
                 string msg = "ERROR: " + ex.Message + "\n";
                 byte[] errorBytes = Encoding.UTF8.GetBytes(msg);
                 await stream.WriteAsync(errorBytes, 0, errorBytes.Length);
+            }
+        }
+         private async void CerrarMesa(string comando, NetworkStream stream, TcpClient cliente)
+        {
+            try
+            {
+                string datos = comando.Substring("CerrarMesa|".Length);
+                string[] partes = datos.Split(',');
+
+                if (partes.Length != 2)
+                {
+                    byte[] errorFormato = Encoding.UTF8.GetBytes("Formato inválido\n");
+                    await stream.WriteAsync(errorFormato, 0, errorFormato.Length);
+                    return;
+                }
+
+                //MessageBox.Show("Datos recibidos para CerrarMesa: " + datos);
+                //MessageBox.Show("Parte 0: " + partes[0]);
+                //MessageBox.Show("Parte 1: " + partes[1]);
+
+                int numeroMesa = int.Parse(partes[0]);
+                int idLocalidad = int.Parse(partes[1]);
+
+                ClienteDAL clienteDAL = new ClienteDAL();
+                int idMesa = clienteDAL.ObtenerIdMesa(numeroMesa, idLocalidad);
+
+                if (idMesa == 0)
+                {
+                    byte[] noExiste = Encoding.UTF8.GetBytes("2\n"); // Mesa no existe
+                    await stream.WriteAsync(noExiste, 0, noExiste.Length);
+                    return;
+                }
+
+                if (!clienteDAL.MesaEstaActiva(numeroMesa, idLocalidad))
+                {
+                    byte[] yaCerrada = Encoding.UTF8.GetBytes("0\n"); // Ya estaba cerrada
+                    await stream.WriteAsync(yaCerrada, 0, yaCerrada.Length);
+                    return;
+                }
+
+                clienteDAL.CerrarMesa(idMesa); // Actualiza el estado en la base a 0 (cerrada)
+
+                byte[] cerrada = Encoding.UTF8.GetBytes("1\n"); // Cerrada correctamente
+                await stream.WriteAsync(cerrada, 0, cerrada.Length);
+            }
+            catch (Exception ex)
+            {
+                byte[] error = Encoding.UTF8.GetBytes("ERROR: " + ex.Message + "\n");
+                await stream.WriteAsync(error, 0, error.Length);
             }
         }
 

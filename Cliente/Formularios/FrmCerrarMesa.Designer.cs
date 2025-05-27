@@ -83,6 +83,7 @@
             this.btnCerrarMesa.Size = new System.Drawing.Size(180, 45);
             this.btnCerrarMesa.TabIndex = 13;
             this.btnCerrarMesa.Text = "Cerrar";
+            this.btnCerrarMesa.Click += new System.EventHandler(this.btnCerrarMesa_Click);
             // 
             // label1
             // 
