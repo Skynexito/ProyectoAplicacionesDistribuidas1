@@ -166,6 +166,7 @@
             this.Controls.Add(this.guna2Panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "FrmCliente";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Servidor";
             this.pnlForm.ResumeLayout(false);
             this.pnlForm.PerformLayout();

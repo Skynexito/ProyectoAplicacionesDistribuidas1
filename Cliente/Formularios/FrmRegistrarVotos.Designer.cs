@@ -91,14 +91,17 @@
             // 
             // numMesa
             // 
+            this.numMesa.AutoRoundedCorners = true;
             this.numMesa.BackColor = System.Drawing.Color.Transparent;
+            this.numMesa.BorderRadius = 23;
             this.numMesa.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.numMesa.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numMesa.Font = new System.Drawing.Font("Segoe UI", 12F);
             this.numMesa.Location = new System.Drawing.Point(318, 71);
             this.numMesa.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.numMesa.Name = "numMesa";
             this.numMesa.Size = new System.Drawing.Size(243, 48);
             this.numMesa.TabIndex = 12;
+            this.numMesa.UseTransparentBackground = true;
             // 
             // dgvVotos
             // 
@@ -112,7 +115,8 @@
             dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.dgvVotos.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
-            this.dgvVotos.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvVotos.ColumnHeadersHeight = 4;
+            this.dgvVotos.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.EnableResizing;
             dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle3.BackColor = System.Drawing.Color.White;
             dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -140,7 +144,7 @@
             this.dgvVotos.ThemeStyle.HeaderStyle.BorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
             this.dgvVotos.ThemeStyle.HeaderStyle.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dgvVotos.ThemeStyle.HeaderStyle.ForeColor = System.Drawing.Color.White;
-            this.dgvVotos.ThemeStyle.HeaderStyle.HeaightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvVotos.ThemeStyle.HeaderStyle.HeaightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.EnableResizing;
             this.dgvVotos.ThemeStyle.HeaderStyle.Height = 4;
             this.dgvVotos.ThemeStyle.ReadOnly = false;
             this.dgvVotos.ThemeStyle.RowsStyle.BackColor = System.Drawing.Color.White;

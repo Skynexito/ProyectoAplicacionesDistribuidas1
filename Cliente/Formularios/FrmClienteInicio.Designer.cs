@@ -83,8 +83,10 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btnIngresar);
             this.Controls.Add(this.cbbLocalidades);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "FrmClienteInicio";
-            this.Text = "Inicio";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Ingreso a reciento electoral";
             this.ResumeLayout(false);
             this.PerformLayout();
 

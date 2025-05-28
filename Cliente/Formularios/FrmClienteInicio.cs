@@ -84,7 +84,7 @@ namespace Cliente.Formularios
         }
 
         private void btnIngresar_Click(object sender, EventArgs e)
-        {
+        {   
             Localidad localidad = (Localidad)cbbLocalidades.SelectedItem;
             this.Hide();
             FrmCliente form = new FrmCliente(this, localidad, clienteTCP);
