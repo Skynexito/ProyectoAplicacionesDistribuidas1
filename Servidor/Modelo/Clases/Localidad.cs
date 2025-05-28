@@ -23,7 +23,7 @@ namespace Servidor.Modelo.Clases
 
         public override string ToString()
         {
-            return $"{Id}: {Nombre};";
+            return $"{Id}: {Nombre}";
         }
 
         public static Localidad FromString(string data)

@@ -69,7 +69,31 @@ namespace Servidor.Modelo.Base_de_datos
             conexion.CerrarConexion();
 
             return datos;
+
         }
+
+        public List<(string Nombre, int Cantidad)> ObtenerResumenVotos(int? idLocalidad = null, int? numeroMesa = null)
+        {
+            List<(string, int)> resultado = new List<(string, int)>();
+            SqlCommand cmd = new SqlCommand("ObtenerResumenVotos", conexion.AbrirConexion());
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            cmd.Parameters.AddWithValue("@IdLocalidad", idLocalidad.HasValue ? (object)idLocalidad.Value : DBNull.Value);
+            cmd.Parameters.AddWithValue("@NumeroMesa", numeroMesa.HasValue ? (object)numeroMesa.Value : DBNull.Value);
+
+            SqlDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                string nombre = reader["NombreOpcion"].ToString();
+                int votos = Convert.ToInt32(reader["TotalVotos"]);
+                resultado.Add((nombre, votos));
+            }
+
+            reader.Close();
+            conexion.CerrarConexion();
+            return resultado;
+        }
+
 
 
     }
