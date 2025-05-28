@@ -31,6 +31,8 @@ namespace Servidor.Formularios
             CargarGrafico();
             CargarLocalidades();
             cbbMesa.Visible = false;
+            cbbLocalidades.DropDownStyle = ComboBoxStyle.DropDownList;
+
         }
 
         private void CargarLocalidades()
@@ -90,12 +92,14 @@ namespace Servidor.Formularios
 
         private void cbbLocalidades_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if(((Localidad)cbbLocalidades.SelectedItem).Id == 0)
+            if(cbbLocalidades.SelectedIndex == 0)
             {
-                CargarGrafico();
                 cbbMesa.Visible = false;
                 cbbMesa.SelectedIndex = -1;
-            }else if (cbbLocalidades.SelectedItem is Localidad loc && loc.Id > 0)
+                cbbMesa.DataSource = null;
+                CargarGrafico();
+            }
+            else if (cbbLocalidades.SelectedItem is Localidad loc && loc.Id > 0)
             {
                 CargarGrafico(((Localidad)cbbLocalidades.SelectedItem).Id);
                 CargarMesasParaLocalidad(loc.Id);
@@ -108,11 +112,13 @@ namespace Servidor.Formularios
         {
             if (cbbMesa.SelectedItem == null)
             {
-                CargarGrafico();
+                CargarGrafico(((Localidad)cbbLocalidades.SelectedItem).Id);
                 cbbMesa.Visible = false;
+                
             }
-            else if (cbbMesa.SelectedItem is int mesa && mesa > 0)
+            else if (!string.IsNullOrEmpty((string)cbbMesa.SelectedItem))
             {
+                int mesa = Convert.ToInt32(cbbMesa.SelectedItem);
                 CargarGrafico(((Localidad)cbbLocalidades.SelectedItem).Id, mesa);
             }
         }
