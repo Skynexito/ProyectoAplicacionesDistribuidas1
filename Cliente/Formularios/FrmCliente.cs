@@ -48,6 +48,7 @@ namespace Servidor
             this.formInicio = formInicio;
             this.clienteTCP = clienteTCP;
             ObtenerParametrosControlAsync(); // ejemplo de uso inmediato
+            lblNombre.Text = localidad.Nombre;
         }
 
         private async void ObtenerParametrosControlAsync()

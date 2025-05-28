@@ -28,7 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.guna2Elipse1 = new Guna.UI2.WinForms.Guna2Elipse();
+            this.components = new System.ComponentModel.Container();
+            this.guna2Elipse1 = new Guna.UI2.WinForms.Guna2Elipse(this.components);
             this.pnlForm = new Guna.UI2.WinForms.Guna2Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.guna2Panel1 = new Guna.UI2.WinForms.Guna2Panel();
@@ -36,6 +37,7 @@
             this.btnCrearLocalidades = new Guna.UI2.WinForms.Guna2Button();
             this.btnAjustarVotantes = new Guna.UI2.WinForms.Guna2Button();
             this.panelChildFrm = new System.Windows.Forms.Panel();
+            this.lblNombre = new System.Windows.Forms.Label();
             this.pnlForm.SuspendLayout();
             this.guna2Panel1.SuspendLayout();
             this.SuspendLayout();
@@ -47,6 +49,7 @@
             // pnlForm
             // 
             this.pnlForm.BackColor = System.Drawing.Color.MidnightBlue;
+            this.pnlForm.Controls.Add(this.lblNombre);
             this.pnlForm.Controls.Add(this.label1);
             this.pnlForm.Location = new System.Drawing.Point(-4, -7);
             this.pnlForm.Name = "pnlForm";
@@ -136,6 +139,17 @@
             this.panelChildFrm.Size = new System.Drawing.Size(685, 445);
             this.panelChildFrm.TabIndex = 3;
             // 
+            // lblNombre
+            // 
+            this.lblNombre.AutoSize = true;
+            this.lblNombre.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblNombre.ForeColor = System.Drawing.SystemColors.Control;
+            this.lblNombre.Location = new System.Drawing.Point(9, 10);
+            this.lblNombre.Name = "lblNombre";
+            this.lblNombre.Size = new System.Drawing.Size(79, 20);
+            this.lblNombre.TabIndex = 1;
+            this.lblNombre.Text = "Servidor";
+            // 
             // FrmServidor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -165,6 +179,7 @@
         private Guna.UI2.WinForms.Guna2Button btnCrearLocalidades;
         private System.Windows.Forms.Panel panelChildFrm;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label lblNombre;
     }
 }
 
