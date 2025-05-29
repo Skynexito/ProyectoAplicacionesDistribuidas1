@@ -58,13 +58,11 @@ namespace Servidor.Modelo.ServidorTCP
                     }
                     else if (comando == "EnviarParametrosControl")
                     {
-                        EnviarParametrosControl(stream, cliente);   
+                        EnviarParametrosControl(stream, cliente);
                     }
                     else if (comando.StartsWith("AsignarMesa|"))
                     {
-
                         EnviarAsignacionMesa(comando, stream, cliente);
-                        
                     }
                     else if (comando.StartsWith("RegistrarVotos|"))
                     {
@@ -78,7 +76,12 @@ namespace Servidor.Modelo.ServidorTCP
                     {
                         CerrarMesa(comando, stream, cliente);
                     }
-
+                    else if (comando == "PING") // <-- Aquí agregamos el manejo del PING
+                    {
+                        string respuesta = "PONG\n";
+                        byte[] datos = Encoding.UTF8.GetBytes(respuesta);
+                        await stream.WriteAsync(datos, 0, datos.Length);
+                    }
                     else
                     {
                         // Mensaje no reconocido, enviar algo opcional
@@ -102,6 +105,7 @@ namespace Servidor.Modelo.ServidorTCP
                 Console.WriteLine("Conexión cerrada con cliente.");
             }
         }
+
 
         private async void EnviarLocalidades(NetworkStream stream, TcpClient cliente)
         {

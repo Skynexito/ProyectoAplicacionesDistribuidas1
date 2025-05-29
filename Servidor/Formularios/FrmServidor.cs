@@ -33,8 +33,6 @@ namespace Servidor
             hiloServidor.Start();
         }
 
-        
-
 
 
         //----------------- Metodo para cambiar entre formularios a traves de un panel dentro del formulario Servidor -----------------------------------------------

@@ -16,6 +16,10 @@ namespace Servidor.Modelo.Base_de_datos
         private SqlCommand comando = new SqlCommand();
         SqlDataReader reader;
 
+        /** 
+         * Este método obtiene todas las localidades de la base de datos utilizando el procedimiento almacenado 'ObtenerLocalidades', 
+         * lee los resultados y los convierte en objetos Localidad, que luego agrega a una lista y retorna.
+         */
         public List<Localidad> ObtenerLocalidades()
         {
             List<Localidad> listaLocalidades = new List<Localidad>();
@@ -32,24 +36,28 @@ namespace Servidor.Modelo.Base_de_datos
                 localidad.CantidadMesas = reader.GetInt32(2);
                 listaLocalidades.Add(localidad);
             }
-            
+
             comando.Parameters.Clear();
             conexion.CerrarConexion();
             return listaLocalidades;
         }
 
+        /**
+         * Este método recibe el ID de una localidad y devuelve la cantidad de mesas asociadas a esa localidad, 
+         * ejecutando el procedimiento almacenado 'CantidadMesasDeLocalidad' y leyendo el resultado del primer campo del resultado.
+         */
         public int ObtenerCantidadMesasPorLocalidad(int idlocalidad)
         {
             int cantidad = 0;
             List<Localidad> listaLocalidades = new List<Localidad>();
             comando.Connection = conexion.AbrirConexion();
             comando.CommandText = "dbo.CantidadMesasDeLocalidad";
-            comando.Parameters.AddWithValue("@IdLocalidad", idlocalidad); 
+            comando.Parameters.AddWithValue("@IdLocalidad", idlocalidad);
             comando.CommandType = CommandType.StoredProcedure;
             reader = comando.ExecuteReader();
             while (reader.Read())
             {
-                
+
                 cantidad = reader.GetInt32(0);
 
             }
@@ -59,6 +67,10 @@ namespace Servidor.Modelo.Base_de_datos
             return cantidad;
         }
 
+        /**
+         * Este método cuenta la cantidad de mesas para una localidad específica usando el procedimiento almacenado 'ContarMesasPorLocalidad', 
+         * y retorna el valor leído del primer campo del resultado.
+         */
         public int ContarMesasPorLocalidad(int idlocalidad)
         {
             int cantidad = 0;
@@ -76,6 +88,11 @@ namespace Servidor.Modelo.Base_de_datos
             conexion.CerrarConexion();
             return cantidad;
         }
+
+        /**
+         * Este método registra una nueva mesa en la base de datos, asociándola a una localidad específica, 
+         * utilizando el procedimiento almacenado 'RegistrarMesa' y estableciendo el estado inicial de la mesa como activa (1).
+         */
         public void RegistrarMesa(int numeroMesa, int idLocalidad)
         {
             SqlCommand cmd = new SqlCommand("RegistrarMesa", conexion.AbrirConexion());
@@ -87,6 +104,10 @@ namespace Servidor.Modelo.Base_de_datos
             conexion.CerrarConexion();
         }
 
+        /**
+         * Este método verifica si una mesa específica está activa en una localidad, 
+         * ejecutando el procedimiento almacenado 'VerificarEstadoMesa' y devolviendo el valor booleano correspondiente al estado.
+         */
         public bool MesaEstaActiva(int numeroMesa, int idLocalidad)
         {
             bool estado = false;
@@ -105,6 +126,10 @@ namespace Servidor.Modelo.Base_de_datos
             return estado;
         }
 
+        /**
+         * Este método obtiene el ID de una mesa específica a partir de su número y localidad, 
+         * ejecutando el procedimiento almacenado 'ObtenerIdMesa' y devolviendo el resultado como entero.
+         */
         public int ObtenerIdMesa(int numeroMesa, int idLocalidad)
         {
             SqlCommand getMesaId = new SqlCommand("dbo.ObtenerIdMesa", conexion.AbrirConexion());
@@ -117,7 +142,11 @@ namespace Servidor.Modelo.Base_de_datos
             return idMesa;
         }
 
-
+        /**
+         * Este método inserta o actualiza la cantidad de votos para una opción en una mesa específica; 
+         * primero verifica si ya existe un registro de votos para esa mesa y opción, 
+         * si existe actualiza la cantidad, de lo contrario inserta un nuevo registro utilizando los procedimientos almacenados correspondientes.
+         */
         public void InsertarOActualizarVoto(int numeroMesa, int idLocalidad, int idOpcion, int cantidad)
         {
             int idMesa = ObtenerIdMesa(numeroMesa, idLocalidad);
@@ -153,6 +182,10 @@ namespace Servidor.Modelo.Base_de_datos
             }
         }
 
+        /**
+         * Este método cierra una mesa específica en la base de datos, 
+         * ejecutando el procedimiento almacenado 'CerrarMesa' con el ID de la mesa correspondiente.
+         */
         public void CerrarMesa(int idMesa)
         {
             SqlCommand cmd = new SqlCommand("dbo.CerrarMesa", conexion.AbrirConexion());
@@ -163,7 +196,10 @@ namespace Servidor.Modelo.Base_de_datos
             conexion.CerrarConexion();
         }
 
-
+        /**
+         * Este método obtiene la lista de opciones (por ejemplo, candidatos) desde la base de datos 
+         * utilizando el procedimiento almacenado 'ObtenerOpciones', construye objetos Opcion con los datos obtenidos y los retorna en una lista.
+         */
         public List<Opcion> ObtenerOpciones()
         {
             List<Opcion> lista = new List<Opcion>();
@@ -194,7 +230,5 @@ namespace Servidor.Modelo.Base_de_datos
 
             return lista;
         }
-
-
     }
 }

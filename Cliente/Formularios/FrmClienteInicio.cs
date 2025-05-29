@@ -19,14 +19,14 @@ namespace Cliente.Formularios
         private List<Localidad> localidades = new List<Localidad>();
         private ClienteTCP clienteTCP = new ClienteTCP();
 
-
         public FrmClienteInicio()
         {
             InitializeComponent();
-            ConectarServidor();
+            // Iniciar la conexión al servidor al cargar el formulario
+            _ = ConectarServidorAsync();
         }
 
-        private async void ConectarServidor()
+        private async Task ConectarServidorAsync()
         {
             bool conectado = false;
 
@@ -66,6 +66,35 @@ namespace Cliente.Formularios
         }
 
 
+        private async Task<bool> IntentarReconectarAsync()
+        {
+            try
+            {
+                bool conectado = await clienteTCP.ConectarAsync("127.0.0.1", 6000);
+                if (conectado)
+                {
+                    await clienteTCP.EnviarComandoAsync("EnviarLocalidades");
+                    string data = await clienteTCP.LeerRespuestaAsync();
+                    localidades = ParsearLocalidades(data);
+
+                    cbbLocalidades.Items.Clear();
+                    foreach (var loc in localidades)
+                    {
+                        cbbLocalidades.Items.Add(loc);
+                    }
+                    cbbLocalidades.SelectedIndex = localidades.Count > 0 ? 0 : -1;
+
+                    return true;
+                }
+            }
+            catch
+            {
+                // Ignorar excepción aquí, se maneja en llamada
+            }
+            return false;
+        }
+
+
         private List<Localidad> ParsearLocalidades(string data)
         {
             List<Localidad> lista = new List<Localidad>();
@@ -74,26 +103,73 @@ namespace Cliente.Formularios
             foreach (string loc in partes)
             {
                 string[] campos = loc.Split(',');
-                int id = int.Parse(campos[0]);
-                string nombre = campos[1];
-                int mesas = int.Parse(campos[2]);
-                lista.Add(new Localidad(id, nombre, mesas));
+                if (campos.Length >= 3 &&
+                    int.TryParse(campos[0], out int id) &&
+                    int.TryParse(campos[2], out int mesas))
+                {
+                    string nombre = campos[1];
+                    lista.Add(new Localidad(id, nombre, mesas));
+                }
             }
 
             return lista;
         }
 
-        private void btnIngresar_Click(object sender, EventArgs e)
-        {   
+        private async void btnIngresar_Click(object sender, EventArgs e)
+        {
+            if (clienteTCP == null || !clienteTCP.Conectado)
+            {
+                var reconectar = MessageBox.Show("El servidor no está disponible. ¿Desea intentar reconectar?", "Error de conexión", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (reconectar == DialogResult.Yes)
+                {
+                    bool exito = await IntentarReconectarAsync();
+                    if (!exito)
+                    {
+                        MessageBox.Show("No se pudo reconectar al servidor.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                }
+                else
+                {
+                    return;
+                }
+            }
+
+            try
+            {
+                await clienteTCP.EnviarComandoAsync("PING");
+                string respuesta = await clienteTCP.LeerRespuestaAsync();
+
+                if (respuesta != "PONG")
+                {
+                    MessageBox.Show("Respuesta inesperada del servidor.", "Error de conexión", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+            }
+            catch
+            {
+                MessageBox.Show("La conexión con el servidor se perdió.", "Error de conexión", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            if (cbbLocalidades.SelectedItem == null)
+            {
+                MessageBox.Show("Por favor, seleccione una localidad.", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             Localidad localidad = (Localidad)cbbLocalidades.SelectedItem;
             this.Hide();
             FrmCliente form = new FrmCliente(this, localidad, clienteTCP);
             form.ShowDialog();
+            this.Show();
         }
+
+
 
         private void FrmClienteInicio_Load(object sender, EventArgs e)
         {
-
+            // Puedes agregar lógica adicional al cargar el formulario si es necesario
         }
     }
 }
