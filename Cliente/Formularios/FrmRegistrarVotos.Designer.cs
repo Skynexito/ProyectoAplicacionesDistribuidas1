@@ -102,6 +102,7 @@
             this.numMesa.Size = new System.Drawing.Size(243, 48);
             this.numMesa.TabIndex = 12;
             this.numMesa.UseTransparentBackground = true;
+            this.numMesa.ValueChanged += new System.EventHandler(this.numMesa_ValueChanged);
             // 
             // dgvVotos
             // 

@@ -18,6 +18,7 @@ namespace Servidor.Formularios
         private Localidad localidad;
         private int maxVotantes;
         private ClienteTCP clienteTCP;
+        
         public FrmRegistrarVotos()
         {
             InitializeComponent();
@@ -29,6 +30,7 @@ namespace Servidor.Formularios
             this.localidad = localidad;
             this.maxVotantes = maxVotantes;
             this.clienteTCP = client;
+            numMesa.Maximum = localidad.CantidadMesas;
         }
 
         private async void FrmRegistrarVotos_Load(object sender, EventArgs e)
@@ -177,6 +179,9 @@ namespace Servidor.Formularios
             return lista;
         }
 
+        private void numMesa_ValueChanged(object sender, EventArgs e)
+        {
 
+        }
     }
 }

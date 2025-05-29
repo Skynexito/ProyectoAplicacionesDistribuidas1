@@ -10,7 +10,7 @@ namespace Servidor.Modelo.Base_de_datos
 {
     public class ConexionDB
     {
-        private SqlConnection conexion = new SqlConnection("Data Source=LAPTOP-VNRGVBH4\\SQLEXPRESS;Initial Catalog=ProyectoDistri;Integrated Security=True");
+        private SqlConnection conexion = new SqlConnection("Data Source=DESKTOP-4RJH76T;Initial Catalog=ProyectoDistri; Integrated Security=True");
 
         public SqlConnection AbrirConexion()
         {

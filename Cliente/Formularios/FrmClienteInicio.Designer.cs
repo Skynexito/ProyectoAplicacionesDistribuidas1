@@ -87,6 +87,7 @@
             this.Name = "FrmClienteInicio";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Ingreso a reciento electoral";
+            this.Load += new System.EventHandler(this.FrmClienteInicio_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

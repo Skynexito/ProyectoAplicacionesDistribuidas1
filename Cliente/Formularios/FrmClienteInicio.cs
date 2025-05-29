@@ -91,5 +91,9 @@ namespace Cliente.Formularios
             form.ShowDialog();
         }
 
+        private void FrmClienteInicio_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
