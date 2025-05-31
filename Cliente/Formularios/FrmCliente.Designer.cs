@@ -28,8 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.guna2Elipse1 = new Guna.UI2.WinForms.Guna2Elipse();
+            this.components = new System.ComponentModel.Container();
+            this.guna2Elipse1 = new Guna.UI2.WinForms.Guna2Elipse(this.components);
             this.pnlForm = new Guna.UI2.WinForms.Guna2Panel();
+            this.lblNombre = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.guna2Panel1 = new Guna.UI2.WinForms.Guna2Panel();
             this.btnSalir = new Guna.UI2.WinForms.Guna2Button();
@@ -37,7 +39,6 @@
             this.btnRegistrarVotos = new Guna.UI2.WinForms.Guna2Button();
             this.btnAsignacionMesa = new Guna.UI2.WinForms.Guna2Button();
             this.panelChildFrm = new System.Windows.Forms.Panel();
-            this.lblNombre = new System.Windows.Forms.Label();
             this.pnlForm.SuspendLayout();
             this.guna2Panel1.SuspendLayout();
             this.SuspendLayout();
@@ -58,6 +59,17 @@
             this.pnlForm.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pnlForm_MouseDown);
             this.pnlForm.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pnlForm_MouseMove);
             this.pnlForm.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pnlForm_MouseUp);
+            // 
+            // lblNombre
+            // 
+            this.lblNombre.AutoSize = true;
+            this.lblNombre.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblNombre.ForeColor = System.Drawing.SystemColors.ControlLight;
+            this.lblNombre.Location = new System.Drawing.Point(12, 10);
+            this.lblNombre.Name = "lblNombre";
+            this.lblNombre.Size = new System.Drawing.Size(86, 20);
+            this.lblNombre.TabIndex = 1;
+            this.lblNombre.Text = "CLIENTE";
             // 
             // label1
             // 
@@ -156,17 +168,6 @@
             this.panelChildFrm.Name = "panelChildFrm";
             this.panelChildFrm.Size = new System.Drawing.Size(685, 445);
             this.panelChildFrm.TabIndex = 3;
-            // 
-            // lblNombre
-            // 
-            this.lblNombre.AutoSize = true;
-            this.lblNombre.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblNombre.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.lblNombre.Location = new System.Drawing.Point(12, 10);
-            this.lblNombre.Name = "lblNombre";
-            this.lblNombre.Size = new System.Drawing.Size(59, 20);
-            this.lblNombre.TabIndex = 1;
-            this.lblNombre.Text = "label2";
             // 
             // FrmCliente
             // 

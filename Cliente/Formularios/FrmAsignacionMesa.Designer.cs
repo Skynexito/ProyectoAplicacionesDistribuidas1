@@ -112,7 +112,7 @@
             this.Controls.Add(this.btnAsignarMesa);
             this.Controls.Add(this.label1);
             this.Name = "FrmAsignacionMesa";
-            this.Text = "Ajustar numero de votantes";
+            this.Text = "Asignacion de mesa";
             this.ResumeLayout(false);
             this.PerformLayout();
 

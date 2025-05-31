@@ -14,6 +14,8 @@ namespace Servidor.Modelo.Clases
 
         public Localidad() { }
 
+        // Constructor con parámetros para inicializar las propiedades
+
         public Localidad(int id, string nombre, int numeroMesas)
         {
             Id = id;
@@ -21,10 +23,14 @@ namespace Servidor.Modelo.Clases
             CantidadMesas = numeroMesas;
         }
 
+
+        // Método para obtener una representación en cadena de la localidad
         public override string ToString()
         {
             return $"{Id}: {Nombre}";
         }
+
+        // Método para crear una instancia de Localidad a partir de una cadena
 
         public static Localidad FromString(string data)
         {

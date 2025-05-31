@@ -106,7 +106,7 @@
             this.Controls.Add(this.btnCerrarMesa);
             this.Controls.Add(this.btnExit);
             this.Name = "FrmCerrarMesa";
-            this.Text = "FrmCerrarMesa";
+            this.Text = "Cerrar Mesa";
             ((System.ComponentModel.ISupportInitialize)(this.numMesa)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
