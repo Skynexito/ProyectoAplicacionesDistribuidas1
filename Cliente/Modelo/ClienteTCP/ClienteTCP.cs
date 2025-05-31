@@ -48,7 +48,7 @@ namespace Cliente.Modelo.ClienteTCP
 
             try // intenta enviar el comando al servidor
             {
-                byte[] buffer = Encoding.UTF8.GetBytes(comando.Trim() + "\n");  // Convierte el comando a un arreglo de bytes usando UTF8 y agrega un salto de línea al final
+                byte[] buffer = Encoding.UTF8.GetBytes(comando.Trim() + "\n");  // Convierte el comando a un arreglo de bytes usando UTF8 y agrega un salto de línea al final, trim elimina los espacios en blanco al inicio y al final de la cadena.
                 await stream.WriteAsync(buffer, 0, buffer.Length);  // Envía el comando al servidor de forma asíncrona
             }
             catch // Captura cualquier excepción que ocurra durante el envío del comando

@@ -27,6 +27,7 @@ namespace Servidor.Formularios
             InitializeComponent();
             this.localidad = localidad;
             this.clienteTCP = cliente;
+            numMesa.Maximum = localidad.CantidadMesas;
         }
         /**
          * Método que se ejecuta al hacer clic en el botón de salida,

@@ -31,7 +31,7 @@ namespace Servidor.Modelo.ServidorTCP
                 while (activo)
                 {
                     TcpClient cliente = servidor.AcceptTcpClient(); // Acepta una conexión entrante
-                    Task.Run(() => AtenderCliente(cliente));        // Atiende al cliente en un hilo separado
+                    Task.Run(() => AtenderCliente(cliente));        // Atiende al cliente en un hilo separado, task.run es un método que permite ejecutar una tarea de forma asíncrona en un hilo del pool de hilos, lo que permite que el servidor continúe aceptando nuevas conexiones mientras atiende a los clientes existentes.
                 }
             }
             catch (Exception ex)    // Captura cualquier excepción que ocurra al iniciar el servidor
@@ -64,11 +64,11 @@ namespace Servidor.Modelo.ServidorTCP
 
                     string comando = Encoding.UTF8.GetString(buffer, 0, leidos).Trim(); // Convierte los bytes leídos a una cadena de texto y elimina espacios en blanco al inicio y al final
 
-                    if (comando == "EnviarLocalidades")
+                    if (comando.Equals("EnviarLocalidades"))    //se usa .equals para comparar cadenas de texto
                     {
                         EnviarLocalidades(stream, cliente);
                     }
-                    else if (comando == "EnviarParametrosControl")
+                    else if (comando.Equals("EnviarParametrosControl"))
                     {
                         EnviarParametrosControl(stream, cliente);
                     }
@@ -80,7 +80,7 @@ namespace Servidor.Modelo.ServidorTCP
                     {
                         RegistrarOpcionesVoto(comando, stream, cliente);
                     }
-                    else if (comando == "EnviarOpciones")
+                    else if (comando.Equals("EnviarOpciones"))
                     {
                         EnviarOpcionesVoto(stream, cliente);
                     }
@@ -88,7 +88,7 @@ namespace Servidor.Modelo.ServidorTCP
                     {
                         CerrarMesa(comando, stream, cliente);
                     }
-                    else if (comando == "PING") // <-- Aquí agregamos el manejo del PING
+                    else if (comando.Equals("PING")) // <-- Aquí agregamos el manejo del PING
                     {
                         string respuesta = "PONG\n";    // Respuesta al comando PING
                         byte[] datos = Encoding.UTF8.GetBytes(respuesta);   // Convertir la respuesta a bytes
