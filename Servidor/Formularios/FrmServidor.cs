@@ -9,7 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Guna.UI2.WinForms;
-using Servidor.Formularios;
+using Servidor.Formularios; // Importar el espacio de nombres del formulario hijo
 using System.Net;
 using System.Net.Sockets;
 using Servidor.Modelo.Clases;
@@ -28,12 +28,26 @@ namespace Servidor
             
             InitializeComponent();
             servidorTCP = new ServidorTCP();
+            servidorTCP.OnMensajeRecibido += AgregarMensaje;
+
             Thread hiloServidor = new Thread(servidorTCP.IniciarServidor);
             hiloServidor.IsBackground = true;
             hiloServidor.Start();
         }
 
-
+        public void AgregarMensaje(string mensaje)
+        {
+            if (txtComunicacion.InvokeRequired)
+            {
+                txtComunicacion.Invoke(new Action(() => {
+                    txtComunicacion.AppendText(mensaje + Environment.NewLine);
+                }));
+            }
+            else
+            {
+                txtComunicacion.AppendText(mensaje + Environment.NewLine);
+            }
+        }
 
         //----------------- Metodo para cambiar entre formularios a traves de un panel dentro del formulario Servidor -----------------------------------------------
         private Form frmActivo = null;

@@ -18,6 +18,8 @@ namespace Servidor.Formularios
         private List<Opcion> listaOpciones = new List<Opcion>();
         private Localidad localidad;
         private int maxVotantes;
+        private FrmCliente frmPadre;
+
         private ClienteTCP clienteTCP;
         
         public FrmRegistrarVotos()
@@ -25,12 +27,13 @@ namespace Servidor.Formularios
             InitializeComponent();
         }
         // Constructor que recibe una localidad y un número máximo de votantes, además del cliente TCP para la comunicación con el servidor
-        public FrmRegistrarVotos(Localidad localidad, int maxVotantes, ClienteTCP client)
+        public FrmRegistrarVotos(Localidad localidad, int maxVotantes, ClienteTCP client, FrmCliente padre)
         {
             InitializeComponent();
             this.localidad = localidad;
             this.maxVotantes = maxVotantes;
             this.clienteTCP = client;
+            this.frmPadre = padre;
             numMesa.Maximum = localidad.CantidadMesas;
         }
         /** 
@@ -40,13 +43,26 @@ namespace Servidor.Formularios
          */
         private async void FrmRegistrarVotos_Load(object sender, EventArgs e)
         {
-            await clienteTCP.EnviarComandoAsync("EnviarOpciones"); // Enviar comando al servidor para obtener las opciones de votación
-            string data = await clienteTCP.LeerRespuestaAsync(); // Leer la respuesta del servidor con las opciones
-            // Parsear las opciones recibidas y almacenarlas en la lista
+            if (frmPadre == null)
+            {
+                MessageBox.Show("Error interno: formulario padre no asignado.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            // Usar el método centralizado para enviar el comando y manejar errores
+            string data = await frmPadre.EnviarComandoConManejoErrores("EnviarOpciones");
+
+            if (data == null)
+            {
+                // Error de comunicación ya manejado en el método centralizado
+                return;
+            }
+
+            // Parsear las opciones recibidas y configurar tabla
             listaOpciones = ParsearOpciones(data);
-            // Configurar la tabla de votos con las opciones obtenidas
             ConfigurarTabla();
         }
+
         /** 
          * Método que se ejecuta al hacer clic en el botón de salida, 
          * cerrando el formulario actual.
@@ -64,36 +80,34 @@ namespace Servidor.Formularios
          */
         private async void btnGuardarNumeroVotantes_Click(object sender, EventArgs e)
         {
-            // se crea una lista para almacenar los votos
             List<Votos> votosList = new List<Votos>();
-            // se crea una instancia de Mesa con el número de mesa y la localidad
             Mesa mesaActual = new Mesa();
             mesaActual.NMesa = Convert.ToInt32(numMesa.Value);
             mesaActual.Localidad = localidad;
             int sumaVotos = 0;
 
-            foreach (DataGridViewRow row in dgvVotos.Rows)  // Recorre cada fila de la tabla de votos
+            foreach (DataGridViewRow row in dgvVotos.Rows)
             {
-                if (row.IsNewRow) continue; // Ignora la fila nueva al final de la tabla
+                if (row.IsNewRow) continue;
 
-                int idOpcion = Convert.ToInt32(row.Cells["IdOpcion"].Value);    // Obtiene el ID de la opción de la fila actual
-                string nombreCandidato = row.Cells["Candidato"].Value?.ToString(); // Obtiene el nombre del candidato de la fila actual
-                string cantidadStr = row.Cells["Cantidad"].Value?.ToString();   // Obtiene la cantidad de votos de la fila actual
+                int idOpcion = Convert.ToInt32(row.Cells["IdOpcion"].Value);
+                string nombreCandidato = row.Cells["Candidato"].Value?.ToString();
+                string cantidadStr = row.Cells["Cantidad"].Value?.ToString();
 
-                if (int.TryParse(cantidadStr, out int cantidad) && cantidad >= 0)   // Verifica si la cantidad es un numero valido y no negativo
+                if (int.TryParse(cantidadStr, out int cantidad) && cantidad >= 0)
                 {
-                    sumaVotos += cantidad;  // Acumula la cantidad de votos
-                    Opcion opcion = listaOpciones.Find(o => o.Id == idOpcion);      // Busca la opción correspondiente en la lista de opciones
-                    Votos voto = new Votos(0, cantidad, mesaActual, opcion);        // Crea un nuevo objeto Votos con los datos de la fila actual
-                    votosList.Add(voto);    // Agrega el voto a la lista de votos
+                    sumaVotos += cantidad;
+                    Opcion opcion = listaOpciones.Find(o => o.Id == idOpcion);
+                    Votos voto = new Votos(0, cantidad, mesaActual, opcion);
+                    votosList.Add(voto);
                 }
-                else // Si la cantidad no es válida, muestra un mensaje de error
+                else
                 {
                     MessageBox.Show($"Cantidad inválida en candidato: {nombreCandidato}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
             }
-            // Validación de cantidad total de votos, asegura que la suma de votos coincida con el número máximo de votantes esperado
+
             if (sumaVotos != maxVotantes)
             {
                 MessageBox.Show($"El número de votos contados ({sumaVotos}) no concuerda con el número esperado ({maxVotantes}) para esta mesa.",
@@ -102,28 +116,38 @@ namespace Servidor.Formularios
                                 MessageBoxIcon.Warning);
                 return;
             }
-            // Validación de votos ingresados, asegura que al menos un voto válido haya sido ingresado
+
             if (votosList.Count == 0)
             {
                 MessageBox.Show("Debe ingresar al menos un voto válido.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 
-            // Construcción del comando para enviar al servidor
-            string comando = $"RegistrarVotos|{mesaActual.NMesa},{localidad.Id}|"; // asegúrate de tener esos objetos
-            foreach (var v in votosList)    // Recorre la lista de votos y construye el comando
+            string comando = $"RegistrarVotos|{mesaActual.NMesa},{localidad.Id}|";
+            foreach (var v in votosList)
             {
-                comando += $"{v.Opcion.Id},{v.Cantidad};";  // Formato: "IdOpcion,Cantidad;"
+                comando += $"{v.Opcion.Id},{v.Cantidad};";
             }
 
-            await clienteTCP.EnviarComandoAsync(comando);   // Enviar el comando al servidor para registrar los votos, await aqui es importante para esperar la respuesta del servidor
-            string respuesta = await clienteTCP.LeerRespuestaAsync();   // Leer la respuesta del servidor
+            // Usar el método centralizado del formulario padre para enviar el comando
+            string respuesta = await frmPadre.EnviarComandoConManejoErrores(comando);
 
-            if (respuesta == "OK")      // Si la respuesta del servidor es "OK", significa que los votos se registraron correctamente
+            if (respuesta == null)
+            {
+                // Error de comunicación ya manejado, solo salir
+                return;
+            }
+
+            if (respuesta == "OK")
+            {
                 MessageBox.Show("Votos registrados correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            else // Si la respuesta no es "OK", muestra un mensaje de error con la respuesta del servidor
+            }
+            else
+            {
                 MessageBox.Show("Error al registrar votos: " + respuesta, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
+
 
         /** 
          * Configura la tabla de votos (DataGridView) para mostrar las opciones de votación. 

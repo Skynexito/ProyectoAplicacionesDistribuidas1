@@ -94,17 +94,18 @@ namespace Servidor
 
         private void btnAsignarMesa_Click(object sender, EventArgs e)
         {
-            OpenChildFrm(new FrmAsignacionMesa(localidad, fechaEleccion, clienteTCP));
+            var frmAsignacion = new FrmAsignacionMesa(localidad, fechaEleccion, clienteTCP, this);
+            OpenChildFrm(frmAsignacion);
         }
 
         private void btnCrearLocalidades_Click(object sender, EventArgs e)
         {
-            OpenChildFrm(new FrmRegistrarVotos(localidad, maxVotantes, clienteTCP));
+            OpenChildFrm(new FrmRegistrarVotos(localidad, maxVotantes, clienteTCP, this));
         }
 
         private void btnStats_Click(object sender, EventArgs e)
         {
-            OpenChildFrm(new FrmCerrarMesa(localidad, clienteTCP));
+            OpenChildFrm(new FrmCerrarMesa(localidad, clienteTCP, this));
         }
 
         private void btnSalir_Click(object sender, EventArgs e)
@@ -154,7 +155,32 @@ namespace Servidor
             this.Close();
         }
 
-        
+        public async Task<string> EnviarComandoConManejoErrores(string comando)
+        {
+            try
+            {
+                if (clienteTCP == null || !clienteTCP.Conectado)
+                {
+                    bool conectado = await clienteTCP.ConectarAsync("IP_SERVIDOR", 6000); // Ajusta IP y puerto
+                    if (!conectado)
+                    {
+                        MessageBox.Show("No se pudo conectar al servidor.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return null;
+                    }
+                }
+
+                await clienteTCP.EnviarComandoAsync(comando);
+                string respuesta = await clienteTCP.LeerRespuestaAsync();
+                return respuesta;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error de comunicación con el servidor: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return null;
+            }
+        }
+
+
     }
 
 

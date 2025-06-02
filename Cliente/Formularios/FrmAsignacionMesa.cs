@@ -19,6 +19,8 @@ namespace Servidor
         private Localidad localidad;
         private DateTime fechaVotacion;
         private ClienteTCP clienteTCP;
+        private FrmCliente frmPadre;
+
         public FrmAsignacionMesa()
         {
             InitializeComponent();
@@ -31,13 +33,13 @@ namespace Servidor
 
         }
         // Constructor que recibe una localidad y una fecha de votación, además del cliente TCP para la comunicación con el servidor
-        public FrmAsignacionMesa(Localidad localidad, DateTime fecha, ClienteTCP client)
+        public FrmAsignacionMesa(Localidad localidad, DateTime fecha, ClienteTCP client, FrmCliente padre)
         {
             InitializeComponent();
             this.localidad = localidad;
             this.fechaVotacion = fecha;
             this.clienteTCP = client;
-
+            this.frmPadre = padre;
         }
 
         /** 
@@ -59,34 +61,41 @@ namespace Servidor
          */
         private async void btnAsignarMesa_Click(object sender, EventArgs e)
         {
-            if (fechaVotacion == mcVotacion.SelectionStart)     // Verifica si la fecha seleccionada en el calendario coincide con la fecha de votación
+            if (fechaVotacion == mcVotacion.SelectionStart)
             {
-                // Si la fecha es correcta, envía un comando al servidor para asignar una mesa a la localidad
-                string mensaje = $"AsignarMesa|{localidad.Id}\n";
-                // Enviar el comando al servidor
-                await clienteTCP.EnviarComandoAsync(mensaje);
-                // Leer la respuesta del servidor
-                string respuesta = await clienteTCP.LeerRespuestaAsync();
+                string mensaje = $"AsignarMesa|{localidad.Id}";
 
-                // Verifica si la respuesta es válida y contiene un número de mesa
-                int numeroMesa = int.Parse(respuesta);
-                // Si el número de mesa es 0, significa que no hay mesas disponibles
-                if (numeroMesa == 0)
+                // Usar la referencia pasada al formulario para llamar al método centralizado
+                string respuesta = await frmPadre.EnviarComandoConManejoErrores(mensaje);
+
+                if (respuesta == null)
                 {
-                    MessageBox.Show("Ya se han asignado todas las mesas para esta localidad.");
+                    // Error manejado, solo salir
+                    return;
+                }
+
+                if (int.TryParse(respuesta, out int numeroMesa))
+                {
+                    if (numeroMesa == 0)
+                    {
+                        MessageBox.Show("Ya se han asignado todas las mesas para esta localidad.");
+                    }
+                    else
+                    {
+                        numMesa.Text = numeroMesa.ToString();
+                    }
                 }
                 else
                 {
-                    // Si hay mesas disponibles, muestra el número de mesa asignado en el formulario
-                    numMesa.Text = Convert.ToString(numeroMesa);
-                    
+                    MessageBox.Show("Respuesta inválida del servidor.");
                 }
-            } // Si la fecha seleccionada no coincide con la fecha de votación, muestra un mensaje de error
+            }
             else
             {
                 MessageBox.Show("La fecha no corresponde con el día de las votaciones.");
             }
         }
+
 
     }
 }

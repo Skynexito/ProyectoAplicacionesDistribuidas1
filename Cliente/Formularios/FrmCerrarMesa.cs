@@ -17,16 +17,19 @@ namespace Servidor.Formularios
         // Variables para almacenar la localidad y el cliente TCP
         private Localidad localidad;
         private ClienteTCP clienteTCP;
+        private FrmCliente frmPadre;
+
         public FrmCerrarMesa()
         {
             InitializeComponent();
         }
         // Constructor que recibe una localidad para inicializar el formulario
-        public FrmCerrarMesa(Localidad localidad, ClienteTCP cliente)
+        public FrmCerrarMesa(Localidad localidad, ClienteTCP cliente, FrmCliente padre)
         {
             InitializeComponent();
             this.localidad = localidad;
             this.clienteTCP = cliente;
+            this.frmPadre = padre;
             numMesa.Maximum = localidad.CantidadMesas;
         }
         /**
@@ -48,10 +51,18 @@ namespace Servidor.Formularios
          */
         private async void btnCerrarMesa_Click(object sender, EventArgs e)
         {
-            int numeroMesa = Convert.ToInt32(numMesa.Value);    // Obtener el número de mesa seleccionado en el control numérico
+            int numeroMesa = Convert.ToInt32(numMesa.Value);
 
-            await clienteTCP.EnviarComandoAsync($"CerrarMesa|{numeroMesa},{localidad.Id}"); // Enviar comando al servidor para cerrar la mesa especificada
-            string respuesta = await clienteTCP.LeerRespuestaAsync();   // Leer la respuesta del servidor después de enviar el comando
+            string comando = $"CerrarMesa|{numeroMesa},{localidad.Id}";
+
+            // Usar el método centralizado del formulario padre para enviar el comando
+            string respuesta = await frmPadre.EnviarComandoConManejoErrores(comando);
+
+            if (respuesta == null)
+            {
+                // Error de comunicación ya manejado, solo salir
+                return;
+            }
 
             switch (respuesta)
             {
@@ -68,7 +79,7 @@ namespace Servidor.Formularios
                     MessageBox.Show("Error inesperado del servidor: " + respuesta);
                     break;
             }
-
         }
+
     }
 }

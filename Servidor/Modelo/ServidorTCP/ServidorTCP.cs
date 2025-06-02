@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;   // List es una colección genérica que permite almacenar elementos de un tipo específico y proporciona métodos para manipularlos.
+using System.Collections.Generic;
 using System.Linq;
-using System.Net.Sockets;   // TcpListener y TcpClient son clases que permiten crear un servidor TCP y manejar conexiones de clientes respectivamente.
-using System.Net;   // IPAddress es una clase que representa una dirección IP, que puede ser IPv4 o IPv6.
-using System.Text;  // Encoding es una clase que proporciona métodos para convertir cadenas de texto a arreglos de bytes y viceversa, utilizando diferentes esquemas de codificación como UTF-8.
-using System.Threading.Tasks;   // Task es una clase que representa una operación asíncrona, permitiendo ejecutar código de forma no bloqueante y esperar su finalización sin bloquear el hilo actual.
-using Servidor.Modelo.Base_de_datos;    // ClienteDAL y ServidorDAL son clases que interactúan con la base de datos para realizar operaciones relacionadas con clientes y servidores respectivamente.
-using System.Windows.Forms; 
-using Servidor.Modelo.Clases;   // Localidad y Opcion son clases que representan entidades del dominio, como localidades y opciones de voto en una elección.
+using System.Net.Sockets;   // .sockets sirve para trabajar con TCP/IP
+using System.Net;
+using System.Text;
+using System.Threading.Tasks;   // Importar las clases necesarias para el servidor TCP
+using Servidor.Modelo.Base_de_datos;    // Importar las clases de acceso a datos
+using System.Windows.Forms;
+using Servidor.Modelo.Clases;   // Importar las clases necesarias
 using System.IO;
 using System.Runtime.InteropServices.ComTypes;
 
@@ -15,304 +15,319 @@ namespace Servidor.Modelo.ServidorTCP
 {
     public class ServidorTCP
     {
-        private TcpListener servidor;   // TcpListener es una clase que permite escuchar conexiones entrantes en un puerto específico.
-        private bool activo = true;     // Indica si el servidor está activo y aceptando conexiones.
-        /**
-         * Método que inicia el servidor TCP en el puerto 6000,
-         * acepta conexiones entrantes y atiende cada cliente en un hilo separado.
-         * Muestra un mensaje en caso de error al iniciar.
+        private TcpListener servidor;
+
+        private bool activo = true;
+        // Evento para notificar mensajes al formulario
+        public event Action<string> OnMensajeRecibido;
+
+        // Método para invocar el evento de forma segura
+        protected void Informar(string mensaje)
+        {
+            OnMensajeRecibido?.Invoke(mensaje);
+        }
+        /* este método se encarga de iniciar el servidor TCP.
+         * Crea un TcpListener que escucha en el puerto 6000 y acepta conexiones entrantes.
+         * Cada vez que un cliente se conecta, se crea un nuevo hilo para atenderlo.
+         * Los comandos recibidos del cliente son procesados y se envían respuestas según corresponda.
          */
         public void IniciarServidor()
         {
             try
             {
-                servidor = new TcpListener(IPAddress.Any, 6000);    // Escucha en todas las interfaces de red en el puerto 6000
-                servidor.Start();   // Inicia el servidor TCP
+                servidor = new TcpListener(IPAddress.Any, 6000);
+                servidor.Start();
+                Informar("Servidor iniciado, esperando conexiones...");
+
                 while (activo)
                 {
-                    TcpClient cliente = servidor.AcceptTcpClient(); // Acepta una conexión entrante
-                    Task.Run(() => AtenderCliente(cliente));        // Atiende al cliente en un hilo separado, task.run es un método que permite ejecutar una tarea de forma asíncrona en un hilo del pool de hilos, lo que permite que el servidor continúe aceptando nuevas conexiones mientras atiende a los clientes existentes.
+                    TcpClient cliente = servidor.AcceptTcpClient();
+                    Informar($"Cliente conectado: {cliente.Client.RemoteEndPoint}");
+                    Task.Run(() => AtenderCliente(cliente));
                 }
             }
-            catch (Exception ex)    // Captura cualquier excepción que ocurra al iniciar el servidor
+            catch (Exception ex)
             {
-                MessageBox.Show("Error al iniciar el servidor: " + ex.Message); // Muestra un mensaje de error si no se puede iniciar el servidor
+                // Notificar error, sin usar MessageBox para evitar problemas en hilos secundarios
+                Informar("Error al iniciar el servidor: " + ex.Message);
             }
         }
-        /**
-         * Método asíncrono que atiende la comunicación con un cliente conectado.
-         * Lee comandos enviados por el cliente y ejecuta la acción correspondiente,
-         * enviando respuestas según el tipo de comando recibido.
-         * Maneja comandos como EnviarLocalidades, EnviarParametrosControl, AsignarMesa, RegistrarVotos,
-         * EnviarOpciones, CerrarMesa y un ping para verificar conexión.
-         * En caso de error, muestra el mensaje en consola y cierra la conexión.
+        /* este método se encarga de atender a cada cliente conectado al servidor.
+         * Se ejecuta en un hilo separado para permitir múltiples conexiones simultáneas.
+         * Lee los comandos enviados por el cliente y responde según el comando recibido.
          */
         public async Task AtenderCliente(TcpClient cliente)
         {
-            NetworkStream stream = cliente.GetStream(); // Obtiene el stream de red asociado al cliente conectado, el stream es el canal de comunicación entre el servidor y el cliente.
+            NetworkStream stream = cliente.GetStream(); // Obtiene el flujo de red del cliente para leer y escribir datos.
 
             try
             {
-                byte[] buffer = new byte[1024]; // Buffer para almacenar los datos leídos del cliente
+                byte[] buffer = new byte[1024]; // Tamaño del buffer para leer datos del cliente
 
-                while (cliente.Connected)   // Mientras el cliente esté conectado, se mantiene en un bucle para leer comandos
+                while (cliente.Connected)
                 {
                     int leidos = await stream.ReadAsync(buffer, 0, buffer.Length);  // Lee datos del cliente de forma asíncrona
 
-                    if (leidos == 0)    // Si no se han leído datos, significa que el cliente ha cerrado la conexión
-                        break; // Cliente cerró conexión
+                    if (leidos == 0) break;
 
-                    string comando = Encoding.UTF8.GetString(buffer, 0, leidos).Trim(); // Convierte los bytes leídos a una cadena de texto y elimina espacios en blanco al inicio y al final
+                    string comando = Encoding.UTF8.GetString(buffer, 0, leidos).Trim(); // Convierte los bytes leídos en una cadena de texto.
+                    Informar($"Mensaje recibido de {cliente.Client.RemoteEndPoint}: {comando}");    // Notifica el comando recibido.
 
-                    if (comando.Equals("EnviarLocalidades"))    //se usa .equals para comparar cadenas de texto
+                    if (comando.Equals("EnviarLocalidades"))
                     {
-                        EnviarLocalidades(stream, cliente);
+                        await EnviarLocalidades(stream, cliente);
                     }
                     else if (comando.Equals("EnviarParametrosControl"))
                     {
-                        EnviarParametrosControl(stream, cliente);
+                        await EnviarParametrosControl(stream, cliente);
                     }
                     else if (comando.StartsWith("AsignarMesa|"))
                     {
-                        EnviarAsignacionMesa(comando, stream, cliente);
+                        await EnviarAsignacionMesa(comando, stream, cliente);
                     }
                     else if (comando.StartsWith("RegistrarVotos|"))
                     {
-                        RegistrarOpcionesVoto(comando, stream, cliente);
+                        await RegistrarOpcionesVoto(comando, stream, cliente);
                     }
                     else if (comando.Equals("EnviarOpciones"))
                     {
-                        EnviarOpcionesVoto(stream, cliente);
+                        await EnviarOpcionesVoto(stream, cliente);
                     }
                     else if (comando.StartsWith("CerrarMesa|"))
                     {
-                        CerrarMesa(comando, stream, cliente);
+                        await CerrarMesa(comando, stream, cliente);
                     }
-                    else if (comando.Equals("PING")) // <-- Aquí agregamos el manejo del PING
+                    else if (comando.Equals("PING"))
                     {
-                        string respuesta = "PONG\n";    // Respuesta al comando PING
-                        byte[] datos = Encoding.UTF8.GetBytes(respuesta);   // Convertir la respuesta a bytes
-                        await stream.WriteAsync(datos, 0, datos.Length);    // Enviar la respuesta al cliente
+                        string respuesta = "PONG\n";
+                        byte[] datos = Encoding.UTF8.GetBytes(respuesta);
+                        await stream.WriteAsync(datos, 0, datos.Length);
+                        Informar($"Mensaje enviado a {cliente.Client.RemoteEndPoint}: {respuesta.Trim()}");
                     }
                     else
                     {
-                        // Mensaje no reconocido, enviar algo opcional
                         string mensaje = "Comando no válido\n";
                         byte[] datos = Encoding.UTF8.GetBytes(mensaje);
                         await stream.WriteAsync(datos, 0, datos.Length);
+                        Informar($"Mensaje enviado a {cliente.Client.RemoteEndPoint}: {mensaje.Trim()}");
                     }
 
-                    // Reiniciar buffer por seguridad (opcional)
-                    Array.Clear(buffer, 0, buffer.Length);  // El buffer se reinicia para evitar datos residuales de lecturas anteriores
+                    Array.Clear(buffer, 0, buffer.Length);  // Limpia el buffer para la próxima lectura
                 }
             }
-            catch (Exception ex)    // Captura cualquier excepción que ocurra al atender al cliente
+            catch (Exception ex)
             {
-                Console.WriteLine("Error al atender cliente: " + ex.Message);
+                Informar($"Error al atender cliente {cliente.Client.RemoteEndPoint}: {ex.Message}");    // Notifica cualquier error ocurrido al atender al cliente.
             }
-            finally // Siempre se ejecuta al finalizar la atención del cliente, ya sea por error o porque se cerró la conexión
+            finally
             {
-                stream.Close(); // Cierra el stream de red asociado al cliente
-                cliente.Close();    // Cierra el TcpClient para liberar recursos
-                Console.WriteLine("Conexión cerrada con cliente.");
+                stream.Close();
+                cliente.Close();
+                Informar($"Cliente desconectado: {cliente.Client.RemoteEndPoint}"); // Notifica que el cliente se ha desconectado.
             }
         }
-        /**
-         * Envía la lista de localidades al cliente.
-         * Obtiene las localidades desde la base de datos y las envía formateadas.
+        /* este metodo se encarga de enviar la lista de localidades al cliente.
+         * Obtiene las localidades desde la base de datos y las envía en un formato específico.
+         * Cada localidad se envía como una cadena con su ID, nombre y cantidad de mesas.
          */
-
-        private async void EnviarLocalidades(NetworkStream stream, TcpClient cliente)
+        private async Task EnviarLocalidades(NetworkStream stream, TcpClient cliente)
         {
-            ClienteDAL clienteDAL = new ClienteDAL();   // Obtiene una instancia de ClienteDAL para interactuar con la base de datos
-            List<Localidad> localidades = clienteDAL.ObtenerLocalidades();  // método que llama al procedimiento ObtenerLocalidades de la base de datos
+            ClienteDAL clienteDAL = new ClienteDAL();
+            List<Localidad> localidades = clienteDAL.ObtenerLocalidades();
 
-            StringBuilder sb = new StringBuilder(); // Crea un StringBuilder para construir el mensaje a enviar
-            foreach (var loc in localidades)    // Itera sobre cada localidad obtenida
-                sb.Append($"{loc.Id},{loc.Nombre},{loc.CantidadMesas};");   // Formatea cada localidad como "Id,Nombre,CantidadMesas" y las separa con punto y coma, Append es un método de la clase StringBuilder que agrega una cadena al final del contenido actual del objeto StringBuilder.
+            StringBuilder sb = new StringBuilder(); // Construye el mensaje a enviar al cliente.
+            foreach (var loc in localidades)    // Recorre cada localidad y agrega sus datos al mensaje.
+                sb.Append($"{loc.Id},{loc.Nombre},{loc.CantidadMesas};");   // Formato: ID,Nombre,CantidadMesas;
 
-            string mensaje = sb.ToString() + "\n";  // Convierte el StringBuilder a una cadena y agrega un salto de línea al final
-            byte[] datos = Encoding.UTF8.GetBytes(mensaje); // Convierte el mensaje a un arreglo de bytes usando UTF8
-            await stream.WriteAsync(datos, 0, datos.Length);    // Envía el mensaje al cliente de forma asíncrona
+            string mensaje = sb.ToString() + "\n";  // Agrega un salto de línea al final del mensaje para indicar el final de los datos.
+            byte[] datos = Encoding.UTF8.GetBytes(mensaje); // Convierte el mensaje a bytes para enviarlo al cliente.
+            await stream.WriteAsync(datos, 0, datos.Length);    // Envía los datos al cliente de forma asíncrona.
+            Informar($"Mensaje enviado a {cliente.Client.RemoteEndPoint}: {mensaje.Trim()}");   // Notifica que el mensaje ha sido enviado al cliente.
         }
-        /**
-         * Envía los parámetros de control (número de votantes y fecha de elección) al cliente.
-         * Obtiene los datos desde la base de datos y los envía formateados.
+        /* este método se encarga de enviar los parámetros de control al cliente.
+         * Obtiene el número de votantes y la fecha desde la base de datos y los envía en un formato específico.
+         * El mensaje enviado contiene el número de votantes y la fecha en formato "yyyy-MM-dd".
          */
-        private async void EnviarParametrosControl(NetworkStream stream,TcpClient cliente)
+        private async Task EnviarParametrosControl(NetworkStream stream, TcpClient cliente)
         {
-            ServidorDAL servidor = new ServidorDAL();   // Obtiene una instancia de ServidorDAL para interactuar con la base de datos
-            (int numeroVotantes, DateTime fecha) = servidor.ObtenerDatosControl();  // método que llama al procedimiento ObtenerDatosControl de la base de datos
+            ServidorDAL servidor = new ServidorDAL();
+            (int numeroVotantes, DateTime fecha) = servidor.ObtenerDatosControl();
 
-            string mensaje = $"{numeroVotantes},{fecha:yyyy-MM-dd}\n";  // Formatea los datos como "numeroVotantes,fecha" y agrega un salto de línea al final
-            byte[] datos = Encoding.UTF8.GetBytes(mensaje); // Convierte el mensaje a un arreglo de bytes usando UTF8
-            await stream.WriteAsync(datos, 0, datos.Length);    // Envía el mensaje al cliente de forma asíncrona
+            string mensaje = $"{numeroVotantes},{fecha:yyyy-MM-dd}\n";
+            byte[] datos = Encoding.UTF8.GetBytes(mensaje);
+            await stream.WriteAsync(datos, 0, datos.Length);
+            Informar($"Mensaje enviado a {cliente.Client.RemoteEndPoint}: {mensaje.Trim()}");
         }
-        /**
-         * Maneja la asignación de una nueva mesa para una localidad.
-         * Verifica si hay mesas disponibles y registra una nueva si es posible,
-         * enviando el número de mesa asignado o 0 si no hay disponibilidad.
+        /* este metodo se encarga de asignar una mesa a una localidad específica.
+         * Recibe un comando con el ID de la localidad y verifica si se puede asignar una nueva mesa.
+         * Si es posible, registra la nueva mesa y envía su número al cliente; si no, envía "0".
          */
-        private async void EnviarAsignacionMesa(string comando, NetworkStream stream, TcpClient cliente)
+        private async Task EnviarAsignacionMesa(string comando, NetworkStream stream, TcpClient cliente)
         {
-            string idStr = comando.Split('|')[1];   // Extrae el ID de localidad del comando recibido
-            int idLocalidad = int.Parse(idStr);     // Convierte el ID de localidad a entero
+            string idStr = comando.Split('|')[1];
+            int idLocalidad = int.Parse(idStr);
 
-            ClienteDAL clienteDAL = new ClienteDAL();   // Obtiene una instancia de ClienteDAL para interactuar con la base de datos
+            ClienteDAL clienteDAL = new ClienteDAL();
 
-            int mesasExistentes = clienteDAL.ContarMesasPorLocalidad(idLocalidad);  // método que llama al procedimiento ContarMesasPorLocalidad para obtener la cantidad de mesas existentes en la localidad
-            int cantidadMaxima = clienteDAL.ObtenerCantidadMesasPorLocalidad(idLocalidad);  // método que llama al procedimiento ObtenerCantidadMesasPorLocalidad para obtener la cantidad máxima de mesas permitidas en la localidad
+            int mesasExistentes = clienteDAL.ContarMesasPorLocalidad(idLocalidad);
+            int cantidadMaxima = clienteDAL.ObtenerCantidadMesasPorLocalidad(idLocalidad);
 
             if (mesasExistentes < cantidadMaxima)
             {
-                int nuevoNumeroMesa = mesasExistentes + 1;  // Calcula el nuevo número de mesa como el siguiente número disponible
-                clienteDAL.RegistrarMesa(nuevoNumeroMesa, idLocalidad); // método que llama al procedimiento RegistrarMesa para registrar la nueva mesa en la base de datos
-                byte[] datos = Encoding.UTF8.GetBytes($"{nuevoNumeroMesa}\n");  // Envía el número de mesa asignado al cliente, formateado como cadena y convertido a bytes
-                await stream.WriteAsync(datos, 0, datos.Length);    // Envía el número de mesa al cliente de forma asíncrona
+                int nuevoNumeroMesa = mesasExistentes + 1;
+                clienteDAL.RegistrarMesa(nuevoNumeroMesa, idLocalidad);
+                byte[] datos = Encoding.UTF8.GetBytes($"{nuevoNumeroMesa}\n");
+                await stream.WriteAsync(datos, 0, datos.Length);
+                Informar($"Mensaje enviado a {cliente.Client.RemoteEndPoint}: {nuevoNumeroMesa}");
             }
             else
             {
-                byte[] datos = Encoding.UTF8.GetBytes("0\n");   // No hay mesas disponibles, envía 0 al cliente
-                await stream.WriteAsync(datos, 0, datos.Length);    // Envía el mensaje al cliente de forma asíncrona
+                byte[] datos = Encoding.UTF8.GetBytes("0\n");
+                await stream.WriteAsync(datos, 0, datos.Length);
+                Informar($"Mensaje enviado a {cliente.Client.RemoteEndPoint}: 0");
             }
         }
-        /**
-         * Envía las opciones de voto disponibles al cliente.
-         * Obtiene las opciones desde la base de datos y las envía formateadas.
+        /* este metodo se encarga de enviar las opciones de voto disponibles al cliente.
+         * Obtiene las opciones desde la base de datos y las envía en un formato específico.
+         * Cada opción se envía como una cadena con su ID y el nombre del candidato, separados por comas.
          */
-        private async void EnviarOpcionesVoto(NetworkStream stream, TcpClient cliente)
+        private async Task EnviarOpcionesVoto(NetworkStream stream, TcpClient cliente)
         {
-            ClienteDAL clienteDAL = new ClienteDAL();   // Obtiene una instancia de ClienteDAL para interactuar con la base de datos
-            List<Opcion> opciones = clienteDAL.ObtenerOpciones(); // método que llama al procedimiento ObtenerOpciones para obtener las opciones de voto disponibles
+            ClienteDAL clienteDAL = new ClienteDAL();
+            List<Opcion> opciones = clienteDAL.ObtenerOpciones();
 
-            StringBuilder sb = new StringBuilder(); // Crea un StringBuilder para construir el mensaje a enviar
-            foreach (var o in opciones) // Itera sobre cada opción obtenida
+            StringBuilder sb = new StringBuilder();
+            foreach (var o in opciones)
             {
-                sb.Append($"{o.Id},{o.Candidato};");    // Formatea cada opción como "Id,Candidato" y las separa con punto y coma
+                sb.Append($"{o.Id},{o.Candidato};");
             }
 
-            byte[] datos = Encoding.UTF8.GetBytes(sb.ToString() + "\n");    // Convierte el mensaje a un arreglo de bytes usando UTF8 y agrega un salto de línea al final
-            await stream.WriteAsync(datos, 0, datos.Length);    // Envía el mensaje al cliente de forma asíncrona
+            string mensaje = sb.ToString() + "\n";
+            byte[] datos = Encoding.UTF8.GetBytes(mensaje);
+            await stream.WriteAsync(datos, 0, datos.Length);
+            Informar($"Mensaje enviado a {cliente.Client.RemoteEndPoint}: {mensaje.Trim()}");
         }
-        /**
-         * Registra o actualiza los votos enviados por el cliente para una mesa específica.
-         * Valida la existencia y estado de la mesa antes de insertar o actualizar votos.
-         * Envía respuesta OK o mensajes de error según corresponda.
+        /* este metodo se encarga de registrar los votos recibidos para una mesa específica.
+         * Recibe un comando con el número de mesa, ID de localidad y los votos por opción.
+         * Verifica si la mesa existe y está activa, luego registra los votos en la base de datos.
+         * Envía "OK" al cliente si el registro fue exitoso, o un mensaje de error si hubo problemas.
          */
-        private async void RegistrarOpcionesVoto(string comando, NetworkStream stream, TcpClient cliente)
+        private async Task RegistrarOpcionesVoto(string comando, NetworkStream stream, TcpClient cliente)
         {
             try
             {
-                // Extraer los datos del comando
-                string datos = comando.Substring("RegistrarVotos|".Length); // Elimina el prefijo del comando para obtener los datos relevantes
-                string[] partes = datos.Split('|'); // formato: NumeroMesa,IdLocalidad|IdOpcion,Cantidad;IdOpcion,Cantidad;...
+                string datos = comando.Substring("RegistrarVotos|".Length);
+                string[] partes = datos.Split('|');
 
-                if (partes.Length < 2)  // Comprobar si hay suficientes partes en el comando
+                if (partes.Length < 2)
                 {
-                    string errorMsg = "Comando incompleto\n";   //  Mensaje de error si el comando no tiene el formato esperado
-                    byte[] errorBytes = Encoding.UTF8.GetBytes(errorMsg);   // Convertir el mensaje de error a bytes
-                    await stream.WriteAsync(errorBytes, 0, errorBytes.Length);  // Enviar el mensaje de error al cliente
-                    return; // Salir del método si el formato es incorrecto
+                    string errorMsg = "Comando incompleto\n";
+                    byte[] errorBytes = Encoding.UTF8.GetBytes(errorMsg);
+                    await stream.WriteAsync(errorBytes, 0, errorBytes.Length);
+                    Informar($"Mensaje enviado a {cliente.Client.RemoteEndPoint}: {errorMsg.Trim()}");
+                    return;
                 }
 
-                string[] mesaData = partes[0].Split(','); // formato: NumeroMesa,IdLocalidad
-                int numeroMesa = int.Parse(mesaData[0]);    // Convertir el número de mesa a entero
-                int idLocalidad = int.Parse(mesaData[1]);   // Convertir el ID de localidad a entero
+                string[] mesaData = partes[0].Split(',');
+                int numeroMesa = int.Parse(mesaData[0]);
+                int idLocalidad = int.Parse(mesaData[1]);
 
-                string[] votosPartes = partes[1].Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);   // formato: IdOpcion,Cantidad;IdOpcion,Cantidad;...
+                string[] votosPartes = partes[1].Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
 
-                ClienteDAL clienteDAL = new ClienteDAL();   // Obtiene una instancia de ClienteDAL para interactuar con la base de datos
+                ClienteDAL clienteDAL = new ClienteDAL();
 
-                int idMesa = clienteDAL.ObtenerIdMesa(numeroMesa, idLocalidad); // método que llama al procedimiento ObtenerIdMesa para obtener el ID de la mesa según el número y localidad
+                int idMesa = clienteDAL.ObtenerIdMesa(numeroMesa, idLocalidad);
 
-                if (idMesa == 0)    // Mesa no existe
+                if (idMesa == 0)
                 {
                     byte[] datosNoExiste = Encoding.UTF8.GetBytes("Mesa no encontrada\n");
-                    await stream.WriteAsync(datosNoExiste, 0, datosNoExiste.Length);    //  Enviar mensaje de error al cliente
-                    return;
-                }
-
-                // Validar si la mesa está activa
-                if (!clienteDAL.MesaEstaActiva(numeroMesa, idLocalidad))    // Mesa no está activa
-                {
-                    byte[] datosError = Encoding.UTF8.GetBytes("Mesa no activa\n"); // Enviar mensaje de error al cliente
-                    await stream.WriteAsync(datosError, 0, datosError.Length);  // Enviar mensaje de error al cliente
-                    return;
-                }
-
-                // Insertar o actualizar cada voto
-                foreach (string voto in votosPartes)
-                {
-                    string[] campos = voto.Split(',');  // formato: IdOpcion,Cantidad
-                    int idOpcion = int.Parse(campos[0]);    // Convertir el ID de opción a entero
-                    int cantidad = int.Parse(campos[1]);    // Convertir la cantidad de votos a entero
-
-                    clienteDAL.InsertarOActualizarVoto(numeroMesa, idLocalidad, idOpcion, cantidad);    // método que llama al procedimiento InsertarOActualizarVoto para insertar o actualizar el voto en la base de datos
-                }
-
-                // Confirmar al cliente
-                byte[] datosOK = Encoding.UTF8.GetBytes("OK\n");    // Mensaje de confirmación de que los votos fueron registrados correctamente
-                await stream.WriteAsync(datosOK, 0, datosOK.Length);    // Enviar mensaje de confirmación al cliente
-            }
-            catch (Exception ex)    // Captura cualquier excepción que ocurra durante el procesamiento del comando
-            {
-                string msg = "ERROR: " + ex.Message + "\n";     // Mensaje de error que incluye la descripción de la excepción
-                byte[] errorBytes = Encoding.UTF8.GetBytes(msg);    // Convertir el mensaje de error a bytes
-                await stream.WriteAsync(errorBytes, 0, errorBytes.Length);  // Enviar mensaje de error al cliente
-            }
-        }
-        /**
-         * Cierra una mesa específica actualizando su estado en la base de datos.
-         * Valida el formato del comando, existencia y estado de la mesa antes de cerrar.
-         * Envía códigos de respuesta según el resultado:
-         * "1" = cerrada correctamente,
-         * "0" = ya estaba cerrada,
-         * "2" = mesa no existe,
-         * o mensaje de error en caso de excepción.
-         */
-        private async void CerrarMesa(string comando, NetworkStream stream, TcpClient cliente)
-        {
-            try
-            {
-                string datos = comando.Substring("CerrarMesa|".Length); // Elimina el prefijo del comando para obtener los datos relevantes, substring es un método de la clase String que devuelve una subcadena de la cadena original, comenzando en el índice especificado hasta el final de la cadena.
-                string[] partes = datos.Split(','); // formato: NumeroMesa,IdLocalidad
-
-                if (partes.Length != 2) // Verifica que el comando tenga el formato correcto
-                {
-                    byte[] errorFormato = Encoding.UTF8.GetBytes("Formato inválido\n"); // Mensaje de error si el formato del comando es incorrecto
-                    await stream.WriteAsync(errorFormato, 0, errorFormato.Length);  // Enviar mensaje de error al cliente
-                    return;
-                }
-
-                int numeroMesa = int.Parse(partes[0]);  // Convertir el número de mesa a entero
-                int idLocalidad = int.Parse(partes[1]); // Convertir el ID de localidad a entero
-
-                ClienteDAL clienteDAL = new ClienteDAL();   // Obtiene una instancia de ClienteDAL para interactuar con la base de datos
-                int idMesa = clienteDAL.ObtenerIdMesa(numeroMesa, idLocalidad); // método que llama al procedimiento ObtenerIdMesa para obtener el ID de la mesa según el número y localidad
-
-                if (idMesa == 0)    // Mesa no existe
-                {
-                    byte[] noExiste = Encoding.UTF8.GetBytes("2\n"); // Mesa no existe
-                    await stream.WriteAsync(noExiste, 0, noExiste.Length);
+                    await stream.WriteAsync(datosNoExiste, 0, datosNoExiste.Length);
+                    Informar($"Mensaje enviado a {cliente.Client.RemoteEndPoint}: Mesa no encontrada");
                     return;
                 }
 
                 if (!clienteDAL.MesaEstaActiva(numeroMesa, idLocalidad))
                 {
-                    byte[] yaCerrada = Encoding.UTF8.GetBytes("0\n"); // La mesa ya estaba cerrada
-                    await stream.WriteAsync(yaCerrada, 0, yaCerrada.Length);    // Enviar mensaje de que la mesa ya estaba cerrada
+                    byte[] datosError = Encoding.UTF8.GetBytes("Mesa no activa\n");
+                    await stream.WriteAsync(datosError, 0, datosError.Length);
+                    Informar($"Mensaje enviado a {cliente.Client.RemoteEndPoint}: Mesa no activa");
                     return;
                 }
 
-                clienteDAL.CerrarMesa(idMesa); // método que llama al procedimiento CerrarMesa para actualizar el estado de la mesa en la base de datos
+                foreach (string voto in votosPartes)
+                {
+                    string[] campos = voto.Split(',');
+                    int idOpcion = int.Parse(campos[0]);
+                    int cantidad = int.Parse(campos[1]);
 
-                byte[] cerrada = Encoding.UTF8.GetBytes("1\n"); //  Mesa cerrada correctamente
-                await stream.WriteAsync(cerrada, 0, cerrada.Length);    // Enviar mensaje de que la mesa fue cerrada correctamente
+                    clienteDAL.InsertarOActualizarVoto(numeroMesa, idLocalidad, idOpcion, cantidad);
+                }
+
+                byte[] datosOK = Encoding.UTF8.GetBytes("OK\n");
+                await stream.WriteAsync(datosOK, 0, datosOK.Length);
+                Informar($"Mensaje enviado a {cliente.Client.RemoteEndPoint}: OK");
             }
-            catch (Exception ex)    // Captura cualquier excepción que ocurra durante el procesamiento del comando
+            catch (Exception ex)
             {
-                byte[] error = Encoding.UTF8.GetBytes("ERROR: " + ex.Message + "\n");   // Mensaje de error que incluye la descripción de la excepción
-                await stream.WriteAsync(error, 0, error.Length);    // Enviar mensaje de error al cliente
+                string msg = "ERROR: " + ex.Message + "\n";
+                byte[] errorBytes = Encoding.UTF8.GetBytes(msg);
+                await stream.WriteAsync(errorBytes, 0, errorBytes.Length);
+                Informar($"Mensaje enviado a {cliente.Client.RemoteEndPoint}: {msg.Trim()}");
+            }
+        }
+        /* este metodo se encarga de cerrar una mesa específica.
+         * Recibe un comando con el número de mesa y ID de localidad.
+         * Verifica si la mesa existe y está activa, luego la cierra en la base de datos.
+         * Envía "1" al cliente si el cierre fue exitoso, "0" si ya estaba cerrada, o "2" si la mesa no existe.
+         */
+        private async Task CerrarMesa(string comando, NetworkStream stream, TcpClient cliente)
+        {
+            try
+            {
+                string datos = comando.Substring("CerrarMesa|".Length); // Extrae los datos del comando, eliminando el prefijo "CerrarMesa|".
+                string[] partes = datos.Split(',');
+
+                if (partes.Length != 2)
+                {
+                    byte[] errorFormato = Encoding.UTF8.GetBytes("Formato inválido\n");
+                    await stream.WriteAsync(errorFormato, 0, errorFormato.Length);
+                    Informar($"Mensaje enviado a {cliente.Client.RemoteEndPoint}: Formato inválido");
+                    return;
+                }
+
+                int numeroMesa = int.Parse(partes[0]);
+                int idLocalidad = int.Parse(partes[1]);
+
+                ClienteDAL clienteDAL = new ClienteDAL();
+                int idMesa = clienteDAL.ObtenerIdMesa(numeroMesa, idLocalidad);
+
+                if (idMesa == 0)
+                {
+                    byte[] noExiste = Encoding.UTF8.GetBytes("2\n");
+                    await stream.WriteAsync(noExiste, 0, noExiste.Length);
+                    Informar($"Mensaje enviado a {cliente.Client.RemoteEndPoint}: Mesa no existe");
+                    return;
+                }
+
+                if (!clienteDAL.MesaEstaActiva(numeroMesa, idLocalidad))
+                {
+                    byte[] yaCerrada = Encoding.UTF8.GetBytes("0\n");
+                    await stream.WriteAsync(yaCerrada, 0, yaCerrada.Length);
+                    Informar($"Mensaje enviado a {cliente.Client.RemoteEndPoint}: Mesa ya cerrada");
+                    return;
+                }
+
+                clienteDAL.CerrarMesa(idMesa);
+
+                byte[] cerrada = Encoding.UTF8.GetBytes("1\n");
+                await stream.WriteAsync(cerrada, 0, cerrada.Length);
+                Informar($"Mensaje enviado a {cliente.Client.RemoteEndPoint}: Mesa cerrada correctamente");
+            }
+            catch (Exception ex)
+            {
+                byte[] error = Encoding.UTF8.GetBytes("ERROR: " + ex.Message + "\n");
+                await stream.WriteAsync(error, 0, error.Length);
+                Informar($"Mensaje enviado a {cliente.Client.RemoteEndPoint}: ERROR: {ex.Message}");
             }
         }
     }

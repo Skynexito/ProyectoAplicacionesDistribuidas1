@@ -31,15 +31,18 @@
             this.components = new System.ComponentModel.Container();
             this.guna2Elipse1 = new Guna.UI2.WinForms.Guna2Elipse(this.components);
             this.pnlForm = new Guna.UI2.WinForms.Guna2Panel();
+            this.lblNombre = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.guna2Panel1 = new Guna.UI2.WinForms.Guna2Panel();
             this.btnStats = new Guna.UI2.WinForms.Guna2Button();
             this.btnCrearLocalidades = new Guna.UI2.WinForms.Guna2Button();
             this.btnAjustarVotantes = new Guna.UI2.WinForms.Guna2Button();
             this.panelChildFrm = new System.Windows.Forms.Panel();
-            this.lblNombre = new System.Windows.Forms.Label();
+            this.txtComunicacion = new Guna.UI2.WinForms.Guna2TextBox();
+            this.lblComTcp = new System.Windows.Forms.Label();
             this.pnlForm.SuspendLayout();
             this.guna2Panel1.SuspendLayout();
+            this.panelChildFrm.SuspendLayout();
             this.SuspendLayout();
             // 
             // guna2Elipse1
@@ -58,6 +61,17 @@
             this.pnlForm.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pnlForm_MouseDown);
             this.pnlForm.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pnlForm_MouseMove);
             this.pnlForm.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pnlForm_MouseUp);
+            // 
+            // lblNombre
+            // 
+            this.lblNombre.AutoSize = true;
+            this.lblNombre.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblNombre.ForeColor = System.Drawing.SystemColors.Control;
+            this.lblNombre.Location = new System.Drawing.Point(9, 10);
+            this.lblNombre.Name = "lblNombre";
+            this.lblNombre.Size = new System.Drawing.Size(79, 20);
+            this.lblNombre.TabIndex = 1;
+            this.lblNombre.Text = "Servidor";
             // 
             // label1
             // 
@@ -134,21 +148,42 @@
             // 
             // panelChildFrm
             // 
+            this.panelChildFrm.Controls.Add(this.lblComTcp);
+            this.panelChildFrm.Controls.Add(this.txtComunicacion);
             this.panelChildFrm.Location = new System.Drawing.Point(207, 31);
             this.panelChildFrm.Name = "panelChildFrm";
             this.panelChildFrm.Size = new System.Drawing.Size(685, 445);
             this.panelChildFrm.TabIndex = 3;
             // 
-            // lblNombre
+            // txtComunicacion
             // 
-            this.lblNombre.AutoSize = true;
-            this.lblNombre.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblNombre.ForeColor = System.Drawing.SystemColors.Control;
-            this.lblNombre.Location = new System.Drawing.Point(9, 10);
-            this.lblNombre.Name = "lblNombre";
-            this.lblNombre.Size = new System.Drawing.Size(79, 20);
-            this.lblNombre.TabIndex = 1;
-            this.lblNombre.Text = "Servidor";
+            this.txtComunicacion.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.txtComunicacion.DefaultText = "";
+            this.txtComunicacion.DisabledState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(208)))), ((int)(((byte)(208)))), ((int)(((byte)(208)))));
+            this.txtComunicacion.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(226)))), ((int)(((byte)(226)))), ((int)(((byte)(226)))));
+            this.txtComunicacion.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(138)))), ((int)(((byte)(138)))), ((int)(((byte)(138)))));
+            this.txtComunicacion.DisabledState.PlaceholderForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(138)))), ((int)(((byte)(138)))), ((int)(((byte)(138)))));
+            this.txtComunicacion.FocusedState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
+            this.txtComunicacion.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.txtComunicacion.HoverState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
+            this.txtComunicacion.Location = new System.Drawing.Point(23, 69);
+            this.txtComunicacion.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.txtComunicacion.Multiline = true;
+            this.txtComunicacion.Name = "txtComunicacion";
+            this.txtComunicacion.PlaceholderText = "";
+            this.txtComunicacion.SelectedText = "";
+            this.txtComunicacion.Size = new System.Drawing.Size(634, 357);
+            this.txtComunicacion.TabIndex = 0;
+            // 
+            // lblComTcp
+            // 
+            this.lblComTcp.AutoSize = true;
+            this.lblComTcp.Font = new System.Drawing.Font("Microsoft YaHei", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblComTcp.Location = new System.Drawing.Point(170, 27);
+            this.lblComTcp.Name = "lblComTcp";
+            this.lblComTcp.Size = new System.Drawing.Size(360, 24);
+            this.lblComTcp.TabIndex = 2;
+            this.lblComTcp.Text = "COMUNICACION TCP CON LOS CLIENTES";
             // 
             // FrmServidor
             // 
@@ -165,6 +200,8 @@
             this.pnlForm.ResumeLayout(false);
             this.pnlForm.PerformLayout();
             this.guna2Panel1.ResumeLayout(false);
+            this.panelChildFrm.ResumeLayout(false);
+            this.panelChildFrm.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -180,6 +217,8 @@
         private System.Windows.Forms.Panel panelChildFrm;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label lblNombre;
+        private Guna.UI2.WinForms.Guna2TextBox txtComunicacion;
+        private System.Windows.Forms.Label lblComTcp;
     }
 }
 
