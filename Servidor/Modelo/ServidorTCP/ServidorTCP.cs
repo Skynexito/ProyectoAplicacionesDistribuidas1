@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Sockets;   // .sockets sirve para trabajar con TCP/IP
-using System.Net;
+using System.Net;   // Importar las clases necesarias para trabajar con direcciones IP
 using System.Text;
 using System.Threading.Tasks;   // Importar las clases necesarias para el servidor TCP
 using Servidor.Modelo.Base_de_datos;    // Importar las clases de acceso a datos
-using System.Windows.Forms;
 using Servidor.Modelo.Clases;   // Importar las clases necesarias
 using System.IO;
-using System.Runtime.InteropServices.ComTypes;
 
 namespace Servidor.Modelo.ServidorTCP
 {
@@ -35,15 +32,15 @@ namespace Servidor.Modelo.ServidorTCP
         {
             try
             {
-                servidor = new TcpListener(IPAddress.Any, 6000);
+                servidor = new TcpListener(IPAddress.Any, 6000);    // Escucha en todas las interfaces de red en el puerto 6000
                 servidor.Start();
                 Informar("Servidor iniciado, esperando conexiones...");
 
                 while (activo)
                 {
                     TcpClient cliente = servidor.AcceptTcpClient();
-                    Informar($"Cliente conectado: {cliente.Client.RemoteEndPoint}");
-                    Task.Run(() => AtenderCliente(cliente));
+                    Informar($"Cliente conectado: {cliente.Client.RemoteEndPoint}");    // Notifica que un cliente se ha conectado
+                    Task.Run(() => AtenderCliente(cliente));    // Inicia un nuevo hilo para atender al cliente conectado, task.run es una forma de ejecutar código asíncrono en un hilo separado.
                 }
             }
             catch (Exception ex)
@@ -52,6 +49,20 @@ namespace Servidor.Modelo.ServidorTCP
                 Informar("Error al iniciar el servidor: " + ex.Message);
             }
         }
+        /* este metodo se encarga de detener el servidor TCP.
+         * Cambia el estado del servidor a inactivo y detiene el TcpListener si está activo.
+         * Esto permite que el servidor deje de aceptar nuevas conexiones y cierre las existentes.
+         */
+        public void DetenerServidor()
+        {
+            activo = false;
+            if (servidor != null)
+            {
+                servidor.Stop();
+                servidor = null;
+            }
+        }
+
         /* este método se encarga de atender a cada cliente conectado al servidor.
          * Se ejecuta en un hilo separado para permitir múltiples conexiones simultáneas.
          * Lee los comandos enviados por el cliente y responde según el comando recibido.
@@ -72,6 +83,12 @@ namespace Servidor.Modelo.ServidorTCP
 
                     string comando = Encoding.UTF8.GetString(buffer, 0, leidos).Trim(); // Convierte los bytes leídos en una cadena de texto.
                     Informar($"Mensaje recibido de {cliente.Client.RemoteEndPoint}: {comando}");    // Notifica el comando recibido.
+                    
+                    if (comando.Equals("CLOSE_CONNECTION")) // esto permite al cliente solicitar una desconexión ordenada del servidor.
+                    {
+                        Informar($"Cliente {cliente.Client.RemoteEndPoint} solicitó desconexión ordenada");
+                        break; // Salir del bucle para cerrar conexión
+                    }
 
                     if (comando.Equals("EnviarLocalidades"))
                     {
@@ -97,7 +114,7 @@ namespace Servidor.Modelo.ServidorTCP
                     {
                         await CerrarMesa(comando, stream, cliente);
                     }
-                    else if (comando.Equals("PING"))
+                    else if (comando.Equals("PING"))    // verifica si el cliente envía un comando PING, lo que indica que está activo y esperando una respuesta.
                     {
                         string respuesta = "PONG\n";
                         byte[] datos = Encoding.UTF8.GetBytes(respuesta);
@@ -114,6 +131,11 @@ namespace Servidor.Modelo.ServidorTCP
 
                     Array.Clear(buffer, 0, buffer.Length);  // Limpia el buffer para la próxima lectura
                 }
+            }
+            // esta excepción se lanza cuando el cliente se desconecta inesperadamente, como al cerrar la aplicación o perder la conexión de red.
+            catch (IOException ex) when (ex.InnerException is SocketException se && se.SocketErrorCode == SocketError.ConnectionReset)  
+            {
+                Informar($"Desconexion por el cliente: {cliente.Client.RemoteEndPoint}");   // Notifica que el cliente se ha desconectado inesperadamente.
             }
             catch (Exception ex)
             {

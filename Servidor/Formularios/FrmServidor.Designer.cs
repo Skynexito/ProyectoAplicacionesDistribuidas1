@@ -38,8 +38,8 @@
             this.btnCrearLocalidades = new Guna.UI2.WinForms.Guna2Button();
             this.btnAjustarVotantes = new Guna.UI2.WinForms.Guna2Button();
             this.panelChildFrm = new System.Windows.Forms.Panel();
-            this.txtComunicacion = new Guna.UI2.WinForms.Guna2TextBox();
             this.lblComTcp = new System.Windows.Forms.Label();
+            this.txtComunicacion = new Guna.UI2.WinForms.Guna2TextBox();
             this.pnlForm.SuspendLayout();
             this.guna2Panel1.SuspendLayout();
             this.panelChildFrm.SuspendLayout();
@@ -155,26 +155,6 @@
             this.panelChildFrm.Size = new System.Drawing.Size(685, 445);
             this.panelChildFrm.TabIndex = 3;
             // 
-            // txtComunicacion
-            // 
-            this.txtComunicacion.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.txtComunicacion.DefaultText = "";
-            this.txtComunicacion.DisabledState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(208)))), ((int)(((byte)(208)))), ((int)(((byte)(208)))));
-            this.txtComunicacion.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(226)))), ((int)(((byte)(226)))), ((int)(((byte)(226)))));
-            this.txtComunicacion.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(138)))), ((int)(((byte)(138)))), ((int)(((byte)(138)))));
-            this.txtComunicacion.DisabledState.PlaceholderForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(138)))), ((int)(((byte)(138)))), ((int)(((byte)(138)))));
-            this.txtComunicacion.FocusedState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
-            this.txtComunicacion.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.txtComunicacion.HoverState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
-            this.txtComunicacion.Location = new System.Drawing.Point(23, 69);
-            this.txtComunicacion.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.txtComunicacion.Multiline = true;
-            this.txtComunicacion.Name = "txtComunicacion";
-            this.txtComunicacion.PlaceholderText = "";
-            this.txtComunicacion.SelectedText = "";
-            this.txtComunicacion.Size = new System.Drawing.Size(634, 357);
-            this.txtComunicacion.TabIndex = 0;
-            // 
             // lblComTcp
             // 
             this.lblComTcp.AutoSize = true;
@@ -184,6 +164,29 @@
             this.lblComTcp.Size = new System.Drawing.Size(360, 24);
             this.lblComTcp.TabIndex = 2;
             this.lblComTcp.Text = "COMUNICACION TCP CON LOS CLIENTES";
+            // 
+            // txtComunicacion
+            // 
+            this.txtComunicacion.AutoScroll = true;
+            this.txtComunicacion.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.txtComunicacion.DefaultText = "";
+            this.txtComunicacion.DisabledState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(208)))), ((int)(((byte)(208)))), ((int)(((byte)(208)))));
+            this.txtComunicacion.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(226)))), ((int)(((byte)(226)))), ((int)(((byte)(226)))));
+            this.txtComunicacion.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(138)))), ((int)(((byte)(138)))), ((int)(((byte)(138)))));
+            this.txtComunicacion.DisabledState.PlaceholderForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(138)))), ((int)(((byte)(138)))), ((int)(((byte)(138)))));
+            this.txtComunicacion.FocusedState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
+            this.txtComunicacion.Font = new System.Drawing.Font("Berlin Sans FB", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtComunicacion.HoverState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
+            this.txtComunicacion.Location = new System.Drawing.Point(23, 69);
+            this.txtComunicacion.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.txtComunicacion.Multiline = true;
+            this.txtComunicacion.Name = "txtComunicacion";
+            this.txtComunicacion.PlaceholderText = "";
+            this.txtComunicacion.ReadOnly = true;
+            this.txtComunicacion.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txtComunicacion.SelectedText = "";
+            this.txtComunicacion.Size = new System.Drawing.Size(634, 357);
+            this.txtComunicacion.TabIndex = 0;
             // 
             // FrmServidor
             // 

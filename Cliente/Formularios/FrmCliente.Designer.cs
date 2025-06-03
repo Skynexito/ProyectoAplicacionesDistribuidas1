@@ -180,7 +180,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "FrmCliente";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Servidor";
+            this.Text = "CLIENTE";
             this.pnlForm.ResumeLayout(false);
             this.pnlForm.PerformLayout();
             this.guna2Panel1.ResumeLayout(false);

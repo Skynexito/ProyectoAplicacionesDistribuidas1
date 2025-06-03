@@ -1,11 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Servidor;
-using Cliente.Modelo.Clases;
-using System.Net.Sockets;
-using Cliente.Modelo.ClienteTCP;
+using System.Collections.Generic;   // Importar las clases necesarias
+using System.Threading.Tasks;   // Importar las clases necesarias para tareas asincrónicas
+using System.Windows.Forms; // Importar las clases necesarias para formularios
+using Servidor; // Importar el espacio de nombres del servidor
+using Cliente.Modelo.Clases;    // Importar la clase Localidad
+using System.Net.Sockets;   // Importar las clases necesarias para manejar conexiones TCP
+using Cliente.Modelo.ClienteTCP;    // Importar la clase ClienteTCP para manejar la conexión con el servidor
+using System.Diagnostics;   // Importar las clases necesarias para depuración
+using System.Text;  // Importar las clases necesarias para manejar cadenas de texto
 
 namespace Cliente.Formularios
 {
@@ -13,7 +15,8 @@ namespace Cliente.Formularios
     {
         private List<Localidad> localidades = new List<Localidad>();    // Lista para almacenar las localidades recibidas del servidor
         private ClienteTCP clienteTCP = new ClienteTCP();               // Cliente TCP para manejar la conexión con el servidor
-
+        private TcpClient cliente;
+        private NetworkStream streamCliente;
         /** 
          * Constructor del formulario FrmClienteInicio.
          * Inicializa los componentes y llama al método asincrónico para conectar al servidor.
@@ -34,7 +37,7 @@ namespace Cliente.Formularios
 
         private async Task ConectarServidorAsync()
         {
-            bool conectado = false;
+            bool conectado = false; // se inicia en false para indicar que aún no se ha conectado
 
             while (!conectado)
             {
@@ -203,5 +206,38 @@ namespace Cliente.Formularios
         }
 
 
+        private void FrmClienteInicio_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            CerrarConexion();
+        }
+        /* este metodo es para cerrar la conexion al servidor cuando se cierra el formulario cliente */
+        private void CerrarConexion()
+        {
+            try
+            {
+                // 1. Enviar comando de desconexión al servidor
+                if (streamCliente != null && cliente != null && cliente.Connected)
+                {
+                    byte[] buffer = Encoding.UTF8.GetBytes("CLOSE_CONNECTION\n");
+                    streamCliente.Write(buffer, 0, buffer.Length);
+
+                    // Esperar breve momento para que el mensaje se envíe
+                    System.Threading.Thread.Sleep(100);
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Error al enviar comando de cierre: " + ex.Message);
+            }
+            finally
+            {
+                // 2. Cerrar recursos en orden
+                streamCliente?.Close();
+                streamCliente?.Dispose();
+
+                cliente?.Close();
+                cliente?.Dispose();
+            }
+        }
     }
 }

@@ -1,20 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Guna.UI2.WinForms;
 using Servidor.Formularios; // Importar el espacio de nombres del formulario hijo
-using System.Net;
-using System.Net.Sockets;
-using Servidor.Modelo.Clases;
-using Servidor.Modelo.Base_de_datos;
-using Servidor.Modelo.ServidorTCP;
+using Servidor.Modelo.ServidorTCP;  // Importar la clase ServidorTCP
 
 
 namespace Servidor
@@ -34,6 +25,7 @@ namespace Servidor
             hiloServidor.IsBackground = true;
             hiloServidor.Start();
         }
+        /* este metodo se encarga de agregar mensajes al TextBox txtComunicacion de forma segura para el hilo */
 
         public void AgregarMensaje(string mensaje)
         {
@@ -121,7 +113,10 @@ namespace Servidor
         {
             this.Close();
         }
+        /* este metodo es para que al cerrar el formulario servidor se detenga el servidor TCP */
+        private void FrmServidor_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            servidorTCP.DetenerServidor();
+        }
     }
-
-
 }
